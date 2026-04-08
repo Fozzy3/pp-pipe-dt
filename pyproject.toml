@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pp-pipe-dt"
+version = "0.1.0"
+description = "GTFS-RT transit data pipeline for projection-reality divergence analysis"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "duckdb>=1.0",
+    "protobuf>=4.25",
+    "gtfs-realtime-bindings>=1.0",
+    "gtfs-kit>=6.1",
+    "pandas>=2.2",
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "scipy>=1.12",
+    "scikit-learn>=1.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+pp-collect = "pipeline.cli:collect_main"
+pp-process = "pipeline.cli:process_main"
+pp-analyze = "pipeline.cli:analyze_main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pipeline"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = ["-v", "--tb=short"]

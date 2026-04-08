@@ -1,0 +1,10 @@
+[Unit]
+Description=Run GTFS-RT collector every 130 seconds
+
+[Timer]
+OnBootSec=10s
+OnUnitActiveSec=130s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

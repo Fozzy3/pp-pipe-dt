@@ -1,0 +1,29 @@
+# Data
+data/raw/
+data/processed/
+data/outputs/
+data/static/*.zip
+*.db
+*.db.*
+*.wal
+*.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+
+# Environment
+.env
+
+# Tools
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/

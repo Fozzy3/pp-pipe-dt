@@ -1,0 +1,11 @@
+[Unit]
+Description=GTFS-RT Data Collector (single cycle)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Documents/repos/pp-pipe-dt
+ExecStart=%h/Documents/repos/pp-pipe-dt/.venv/bin/python scripts/collect.py
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gtfs-collector

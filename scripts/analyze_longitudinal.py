@@ -64,12 +64,19 @@ def ensure_relation_exists(conn: duckdb.DuckDBPyConnection, relation: str) -> No
         )
 
 
+def get_relation_columns(conn: duckdb.DuckDBPyConnection, relation: str) -> set[str]:
+    rows = conn.execute(f"DESCRIBE {relation}").fetchall()
+    return {str(row[0]) for row in rows}
+
+
 def query_monthly_bunching(
     conn: duckdb.DuckDBPyConnection,
     *,
     relation: str,
     route_id: str,
     bunching_threshold: int,
+    direction_expr: str,
+    stop_key_expr: str,
 ) -> pd.DataFrame:
     sql = f"""
     WITH base AS (
@@ -77,9 +84,9 @@ def query_monthly_bunching(
             CAST(year AS INTEGER) AS year,
             CAST(month AS INTEGER) AS month,
             route_id,
-            COALESCE(CAST(direction_id AS INTEGER), -1) AS direction_id,
+            {direction_expr} AS direction_id,
             CAST(service_date AS VARCHAR) AS service_date,
-            COALESCE(from_stop_id, CAST(stop_sequence AS VARCHAR)) AS stop_key,
+            {stop_key_expr} AS stop_key,
             vehicle_id,
             CASE
                 WHEN COALESCE(observed_departure_time, observed_arrival_time) IS NULL THEN NULL
@@ -135,6 +142,8 @@ def query_monthly_headway_drift(
     *,
     relation: str,
     route_id: str,
+    direction_expr: str,
+    stop_key_expr: str,
 ) -> pd.DataFrame:
     sql = f"""
     WITH base AS (
@@ -142,9 +151,9 @@ def query_monthly_headway_drift(
             CAST(year AS INTEGER) AS year,
             CAST(month AS INTEGER) AS month,
             route_id,
-            COALESCE(CAST(direction_id AS INTEGER), -1) AS direction_id,
+            {direction_expr} AS direction_id,
             CAST(service_date AS VARCHAR) AS service_date,
-            COALESCE(from_stop_id, CAST(stop_sequence AS VARCHAR)) AS stop_key,
+            {stop_key_expr} AS stop_key,
             vehicle_id,
             CASE
                 WHEN COALESCE(observed_departure_time, observed_arrival_time) IS NULL THEN NULL
@@ -326,6 +335,17 @@ def main() -> None:
     conn = duckdb.connect(str(db_path), read_only=True)
     try:
         ensure_relation_exists(conn, relation)
+        relation_columns = get_relation_columns(conn, relation)
+        direction_expr = (
+            "COALESCE(CAST(direction_id AS INTEGER), -1)"
+            if "direction_id" in relation_columns
+            else "-1"
+        )
+        stop_key_expr = (
+            "COALESCE(from_stop_id, CAST(stop_sequence AS VARCHAR))"
+            if "from_stop_id" in relation_columns
+            else "CAST(stop_sequence AS VARCHAR)"
+        )
 
         for route_id in routes:
             logger.info("Longitudinal analysis for route %s", route_id)
@@ -335,6 +355,8 @@ def main() -> None:
                 relation=relation,
                 route_id=route_id,
                 bunching_threshold=args.bunching_threshold,
+                direction_expr=direction_expr,
+                stop_key_expr=stop_key_expr,
             )
             monthly_bunching = add_time_index(monthly_bunching)
 
@@ -342,6 +364,8 @@ def main() -> None:
                 conn,
                 relation=relation,
                 route_id=route_id,
+                direction_expr=direction_expr,
+                stop_key_expr=stop_key_expr,
             )
             monthly_headway = add_time_index(monthly_headway)
             monthly_headway = compute_seasonal_stability(monthly_headway)

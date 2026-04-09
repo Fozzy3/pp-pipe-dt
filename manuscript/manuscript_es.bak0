@@ -1,0 +1,51 @@
+\documentclass[journal,twocolumn]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+
+\title{Marco Secuencial Espacio-Temporal para Señales de Alerta Temprana de Agrupamiento de Autobuses en Arquitecturas de Gemelos Digitales de Tránsito}
+
+\author{Carlos Stiven Mora Hoyos, Juan Felipe Rodríguez Galindo
+\thanks{Manuscrito recibido el 9 de abril de 2026; revisado el 09 de abril de 2026. Este trabajo fue apoyado por la iniciativa de investigación pp-pipe-dt.}
+\thanks{Los autores pertenecen al Departamento de Ingeniería (Bogotá, Colombia). Autor de correspondencia: csmorah@udistrital.edu.co, juafrodriguezg@udistrital.edu.co}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	El agrupamiento de autobuses (bus bunching) es una anomalía operativa estocástica que impacta severamente la confiabilidad de los corredores de transporte público de alta frecuencia. Aunque la integración de datos General Transit Feed Specification Realtime (GTFS-RT) en arquitecturas de Gemelos Digitales (DT) ha ganado tracción, los modelos predictivos existentes a menudo sufren de altas tasas de falsos positivos debido al ruido de señales urbanas o fallan en proporcionar suficiente tiempo de anticipación para la intervención operativa. Este artículo propone un marco algorítmico empírico para Señales de Alerta Temprana (EWS) centrado en la eficiencia computacional y la validación secuencial. Utilizando un conjunto de datos de aproximadamente 1 millón de registros crudos de Localización Automática de Vehículos (AVL) de San Francisco Muni (Febrero 2026), demostramos que una ventana secuencial de múltiples paradas ($n-3$) filtra efectivamente el ruido transitorio. Nuestros resultados muestran que un modelo de Regresión Logística balanceado alcanza una precisión de 0.95 y un puntaje F1 corregido de 0.8234 para transiciones de estado. Identificamos la tasa de colapso de intervalos ($\Delta H_{n-1}$) como la principal señal precursora. Además, reportamos una latencia de inferencia de \SI{0.00042}{\ms} por registro utilizando una base de datos analítica en proceso (DuckDB), permitiendo el monitoreo a escala regional en tiempo real. 
+\end{abstract}
+
+\begin{IEEEkeywords}
+	Agrupamiento de autobuses, Gemelos Digitales, Señales de alerta temprana, GTFS Realtime, Aprendizaje automático, Tránsito público, Análisis espacio-temporal, Computación en el borde.
+\end{IEEEkeywords}
+
+\section{Introducción}
+\IEEEPARstart{L}{a} confiabilidad de los sistemas de transporte público es una piedra angular de la sostenibilidad urbana. Sin embargo, las líneas de alta frecuencia son inherentemente inestables debido al fenómeno del ``agrupamiento de autobuses''. Este ciclo de retroalimentación positiva causa una degradación severa en la calidad del servicio.
+El reciente cambio de paradigma hacia arquitecturas de Gemelos Digitales (DT) en la ingeniería de transporte ofrece un marco robusto para el monitoreo en tiempo real y el control proactivo. Un DT de tránsito requiere una representación en tiempo real de alta fidelidad de la flota física, capaz de ingerir flujos masivos de datos GTFS-RT AVL y ejecutar algoritmos predictivos para mitigar eventos de agrupamiento.
+
+\section{Metodología y Arquitectura del Sistema}
+\subsection{Tubería de Datos del Gemelo Digital}
+El marco EWS propuesto está diseñado como la capa predictiva de un Gemelo Digital de Tránsito. Para lograr una latencia sub-milisegundo, evitamos los servidores de bases de datos tradicionales y utilizamos DuckDB, lo que permite un procesamiento en paralelo y optimizado de la información.
+
+\subsection{Ingeniería de Características Espacio-Temporales (Ventana $n-3$)}
+Para predecir el estado $B_n$ en la próxima parada $n$, extraemos la trayectoria histórica del vehículo sobre las paradas anteriores ($n-1, n-2, n-3$). El vector de características $X \in \mathbb{R}^{12}$ captura tanto el estado absoluto como la tasa dinámica de cambio (derivadas discretas de primer orden).
+
+\section{Resultados Longitudinales y Estabilidad Temporal}
+\subsection{Estabilidad Temporal Longitudinal}
+Para verificar que el modelo predictivo no esté sobreajustado a las condiciones específicas de febrero, ampliamos nuestra tubería de ingestión de datos para capturar un conjunto de datos longitudinal exhaustivo de enero a marzo de 2026. Esta ventana temporal ampliada produjo 2.73 millones de observaciones a lo largo de los corredores estudiados. Nuestro análisis confirma que la física subyacente del colapso del intervalo se mantiene constante en el tiempo; la mediana del índice de agrupamiento demostró una estabilidad notable durante los meses de invierno. Específicamente, la Ruta 14 mantuvo un índice de $\sim 0.242$, la Ruta 38 rondó $\sim 0.230$, y la Ruta 49 se mantuvo estable en $\sim 0.328$. Esta evidencia empírica corrobora la robustez del marco secuencial $n-3$ para un despliegue continuo, demostrando que el modelo no está sobreajustado a febrero.
+
+\section{Conclusión}
+Este artículo estudia la predicción del agrupamiento de autobuses en entornos de tránsito de tráfico mixto utilizando un marco de Gemelo Digital secuencial. Encontramos que una ventana espacio-temporal de múltiples paradas ($n-3$) filtra eficazmente el ruido urbano, logrando una precisión de predicción de transición de 0.95. La evidencia empírica respalda consistentemente la eficacia de la solución frente a la varianza estocástica del tráfico y su robustez a nivel longitudinal.
+
+\end{document}

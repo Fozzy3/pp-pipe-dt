@@ -2,7 +2,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{graphicx}
 \usepackage{cite}
 \usepackage{url}
 \usepackage{booktabs}
@@ -13,16 +12,16 @@
 
 \title{Spatio-Temporal Sequential Framework for Early Warning Signals of Bus Bunching in Transit Digital Twin Architectures}
 
-\author{Carlos Stiven Mora Hoyos, Juan Felipe Rodríguez Galindo
-\thanks{Manuscript received April 9, 2026; revised April 09, 2026. This work was supported by the pp-pipe-dt research initiative.}
-\thanks{The authors are with the Department of Engineering (Bogotá, Colombia). Corresponding author: csmorah@udistrital.edu.co, juafrodriguezg@udistrital.edu.co}}
+\author{Juan Felipe Rodríguez Galindo, \textit{Member, IEEE}, and Co-authors
+\thanks{Manuscript received April 7, 2026; revised April 09, 2026. This work was supported by the pp-pipe-dt research initiative.}
+\thanks{The authors are with the Department of Engineering (City, Country). Corresponding author: juafrodriguezg@udistrital.edu.co}}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-	Bus bunching is a stochastic operational anomaly that severely impacts the reliability of high-frequency public transit corridors. While the integration of General Transit Feed Specification Realtime (GTFS-RT) data into Digital Twin (DT) architectures has gained traction, existing predictive models often suffer from high false-positive rates due to urban signal noise or fail to provide sufficient lead time for operational intervention. This paper proposes an empirical algorithmic framework for Early Warning Signals (EWS) focused on computational efficiency and sequential validation. Utilizing a dataset of approximately 1 million raw Automatic Vehicle Location (AVL) records from San Francisco Muni (February 2026)---strictly deduplicated to 205,584 valid observations to eliminate spatial data leakage---we demonstrate that a multi-stop sequential window ($n-3$) effectively filters transient noise. Our results show that a balanced Logistic Regression model, optimized via F1-score maximization and L2 regularization, achieves a precision of 0.95 (95\% CI: [0.93, 0.97]) and a corrected F1-score of 0.8234 (95\% CI: [0.80, 0.84]) for state transitions (nominal to bunching). We identify the rate of headway collapse ($\Delta H_{n-1}$) as the primary precursor signal ($w \approx -0.036$). Furthermore, we report an inference latency of \SI{0.00042}{\ms} per record utilizing an in-process analytical database (DuckDB), enabling regional-scale monitoring in real-time. This study provides the mathematical foundation and performance benchmarks for proactive transit management in mixed-traffic environments and lays the groundwork for control strategies in Bus Rapid Transit (BRT) systems.
+	Bus bunching is a stochastic operational anomaly that severely impacts the reliability of high-frequency public transit corridors. While the integration of General Transit Feed Specification Realtime (GTFS-RT) data into Digital Twin (DT) architectures has gained traction, existing predictive models often suffer from high false-positive rates due to urban signal noise or fail to provide sufficient lead time for operational intervention. This paper proposes an empirical algorithmic framework for Early Warning Signals (EWS) focused on computational efficiency and sequential validation. Utilizing a dataset of approximately 1 million raw Automatic Vehicle Location (AVL) records from San Francisco Muni (February 2026)---strictly deduplicated to 205,584 valid observations to eliminate spatial data leakage---we demonstrate that a multi-stop sequential window ($n-3$) effectively filters transient noise. Our results show that a balanced Logistic Regression model, optimized via F1-score maximization and L2 regularization, achieves a precision of 0.95 and a corrected F1-score of 0.8234 for state transitions (nominal to bunching). We identify the rate of headway collapse ($\Delta H_{n-1}$) as the primary precursor signal ($w \approx -0.036$). Furthermore, we report an inference latency of \SI{0.00042}{\ms} per record utilizing an in-process analytical database (DuckDB), enabling regional-scale monitoring in real-time. This study provides the mathematical foundation and performance benchmarks for proactive transit management in mixed-traffic environments and lays the groundwork for control strategies in Bus Rapid Transit (BRT) systems.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -156,9 +155,7 @@ The baseline model exhibited a catastrophic False Positive Rate (FPR) of 38.67\%
 \subsection{Predictive Performance of the Sequential Framework}
 Implementing the Transition State Filter and the $n-3$ spatio-temporal feature vector, the L2-regularized Logistic Regression model was evaluated on the temporal hold-out set of Route 14. Out of 11,811 nominal-state observations in the final week, 390 actual collapse transitions occurred.
 
-The sequential model achieved an F1-Score of 0.8234 ($\sigma=0.0109$, 95\% CI: $[0.8018, 0.8448]$). The precision reached 0.9521 ($\sigma=0.0109$, 95\% CI: $[0.9282, 0.9692]$), meaning that when the EWS alerts the DT operator of an imminent collapse, the system is correct 95\% of the time, effectively eliminating the false-alarm fatigue seen in the baseline. The recall stood at 0.7241, successfully anticipating nearly three-quarters of all bunching events before they manifested.
-
-To further substantiate the statistical rigor of these metrics, a binomial bootstrap analysis ($B=10,000$ iterations) was conducted on the $n=390$ discrete collapse transitions observed during the temporal hold-out period. The resulting variance for both the F1-Score and Precision estimators converged to $\sigma^2 \approx 0.000120$. This narrow dispersion confirms that the sample size is sufficiently robust to yield statistically significant performance bounds, mitigating the risk of Type I and Type II inferential errors within the mixed-traffic operational domain.
+The sequential model achieved an F1-Score of 0.8234. The precision reached 0.95, meaning that when the EWS alerts the DT operator of an imminent collapse, the system is correct 95\% of the time, effectively eliminating the false-alarm fatigue seen in the baseline. The recall stood at 0.7241, successfully anticipating nearly three-quarters of all bunching events before they manifested.
 
 \subsection{Spatial Generalization (Transfer Learning)}
 A critical requirement for an algorithm within a regional Digital Twin is its ability to generalize across different topographies without demanding corridor-specific retraining. The model trained on Route 14 was tested directly on Routes 38 and 49.
@@ -168,13 +165,13 @@ A critical requirement for an algorithm within a regional Digital Twin is its ab
 	\centering
 	\begin{tabular}{@{}lccc@{}}
 		\toprule
-		\textbf{Metric}      & \textbf{Route 14}   & \textbf{Route 38}  & \textbf{Route 49}  \\
-		                     & (Temporal Hold-out) & (Spatial Transfer) & (Spatial Transfer) \\ \midrule
-		Total Samples        & 11,811              & 46,007             & 55,637             \\
-		F1-Score ($\pm$ CI)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014 & 0.8576 $\pm$ 0.013 \\
-		Precision ($\pm$ CI) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008 & 0.9642 $\pm$ 0.007 \\
-		Recall               & 0.7241              & 0.7689             & 0.7712             \\
-		PR-AUC               & 0.765               & 0.792              & 0.795              \\ \bottomrule
+		\textbf{Metric} & \textbf{Route 14}   & \textbf{Route 38}  & \textbf{Route 49}  \\
+		                & (Temporal Hold-out) & (Spatial Transfer) & (Spatial Transfer) \\ \midrule
+		Total Samples   & 11,811              & 46,007             & 55,637             \\
+		F1-Score        & 0.8227              & 0.8549             & 0.8576             \\
+		Precision       & 0.9521              & 0.9610             & 0.9642             \\
+		Recall          & 0.7241              & 0.7689             & 0.7712             \\
+		PR-AUC          & 0.765               & 0.792              & 0.795              \\ \bottomrule
 	\end{tabular}
 	\label{tab:performance}
 \end{table}
@@ -183,7 +180,13 @@ As detailed in Table \ref{tab:performance}, the model actually performed \textit
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.9\linewidth]{../data/outputs/fig6_pr_curve.pdf}
+	\framebox{\parbox{0.9\linewidth}{\centering
+			\vspace{2.5cm}
+			\textbf{Image Placeholder} \\
+			\vspace{0.5cm}
+			\small\textit{Precision-Recall curves showing robust AUPRC values \\ across Routes 14, 38, and 49.}
+			\vspace{2.5cm}
+		}}
 	\caption{Precision-Recall (PR) curves demonstrating the superior trade-off between sensitivity and specificity achieved by the $n-3$ sequential model across multiple independent spatial domains.}
 	\label{fig:pr_curve}
 \end{figure}
@@ -221,7 +224,7 @@ Future work will focus on calibrating and deploying the proposed EWS framework w
 By migrating this algorithmic framework to a BRT Digital Twin, the exogenous traffic variance is mathematically isolated. The primary drivers of $\Delta H$ become strictly endogenous: passenger boarding rates (dwell times) and individual driver behavior. We hypothesize that applying this exact sequential model in an exclusive-lane topology will drive the F1-Score above 0.90, providing an impeccably clean signal \cite{30} to trigger automated, closed-loop holding controls \cite{10} without requiring human-in-the-loop validation.
 
 \section{Conclusion}
-This paper studies bus bunching prediction in mixed-traffic transit environments using a sequential Digital Twin framework. We find that a multi-stop ($n-3$) spatio-temporal window, optimized via L2-regularized Logistic Regression, effectively filters urban noise, achieving a transition prediction precision of 0.95 (95\% CI: [0.93, 0.97]) and a corrected F1-Score of 0.8234 (95\% CI: [0.80, 0.84]). The evidence is consistent with the hypothesis that the rate of headway collapse ($\Delta H$) is the singular dominant precursor to systemic degradation, though stochastic exogenous variance in mixed-traffic corridors limits inference about absolute anomaly prediction. These findings inform proactive transit management and Edge-Cloud monitoring by providing computationally efficient (sub-millisecond) early warning signals.
+This paper studies bus bunching prediction in mixed-traffic transit environments using a sequential Digital Twin framework. We find that a multi-stop ($n-3$) spatio-temporal window, optimized via L2-regularized Logistic Regression, effectively filters urban noise, achieving a transition prediction precision of 0.95 and a corrected F1-Score of 0.8234. The evidence is consistent with the hypothesis that the rate of headway collapse ($\Delta H$) is the singular dominant precursor to systemic degradation, though stochastic exogenous variance in mixed-traffic corridors limits inference about absolute anomaly prediction. These findings inform proactive transit management and Edge-Cloud monitoring by providing computationally efficient (sub-millisecond) early warning signals.
 
 \section*{Reproducibility}
 To ensure methodological transparency and support further research, the full DuckDB ingestion scripts, transformation pipelines, and hyperparameter configuration matrices utilized in this study are open-source and available at: \url{https://github.com/gentleman-programming/pp-pipe-dt}.

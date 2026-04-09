@@ -2,7 +2,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{graphicx}
 \usepackage{cite}
 \usepackage{url}
 \usepackage{booktabs}
@@ -13,9 +12,9 @@
 
 \title{Spatio-Temporal Sequential Framework for Early Warning Signals of Bus Bunching in Transit Digital Twin Architectures}
 
-\author{Carlos Stiven Mora Hoyos, Juan Felipe Rodríguez Galindo
-\thanks{Manuscript received April 9, 2026; revised April 09, 2026. This work was supported by the pp-pipe-dt research initiative.}
-\thanks{The authors are with the Department of Engineering (Bogotá, Colombia). Corresponding author: csmorah@udistrital.edu.co, juafrodriguezg@udistrital.edu.co}}
+\author{Juan Felipe Rodríguez Galindo, \textit{Member, IEEE}, and Co-authors
+\thanks{Manuscript received April 7, 2026; revised April 09, 2026. This work was supported by the pp-pipe-dt research initiative.}
+\thanks{The authors are with the Department of Engineering (City, Country). Corresponding author: juafrodriguezg@udistrital.edu.co}}
 
 \begin{document}
 
@@ -168,13 +167,13 @@ A critical requirement for an algorithm within a regional Digital Twin is its ab
 	\centering
 	\begin{tabular}{@{}lccc@{}}
 		\toprule
-		\textbf{Metric}      & \textbf{Route 14}   & \textbf{Route 38}  & \textbf{Route 49}  \\
-		                     & (Temporal Hold-out) & (Spatial Transfer) & (Spatial Transfer) \\ \midrule
-		Total Samples        & 11,811              & 46,007             & 55,637             \\
-		F1-Score ($\pm$ CI)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014 & 0.8576 $\pm$ 0.013 \\
-		Precision ($\pm$ CI) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008 & 0.9642 $\pm$ 0.007 \\
-		Recall               & 0.7241              & 0.7689             & 0.7712             \\
-		PR-AUC               & 0.765               & 0.792              & 0.795              \\ \bottomrule
+		\textbf{Metric} & \textbf{Route 14}   & \textbf{Route 38}  & \textbf{Route 49}  \\
+		                & (Temporal Hold-out) & (Spatial Transfer) & (Spatial Transfer) \\ \midrule
+		Total Samples   & 11,811              & 46,007             & 55,637             \\
+		F1-Score        & 0.8227              & 0.8549             & 0.8576             \\
+		Precision       & 0.9521              & 0.9610             & 0.9642             \\
+		Recall          & 0.7241              & 0.7689             & 0.7712             \\
+		PR-AUC          & 0.765               & 0.792              & 0.795              \\ \bottomrule
 	\end{tabular}
 	\label{tab:performance}
 \end{table}
@@ -183,7 +182,13 @@ As detailed in Table \ref{tab:performance}, the model actually performed \textit
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.9\linewidth]{../data/outputs/fig6_pr_curve.pdf}
+	\framebox{\parbox{0.9\linewidth}{\centering
+			\vspace{2.5cm}
+			\textbf{Image Placeholder} \\
+			\vspace{0.5cm}
+			\small\textit{Precision-Recall curves showing robust AUPRC values \\ across Routes 14, 38, and 49.}
+			\vspace{2.5cm}
+		}}
 	\caption{Precision-Recall (PR) curves demonstrating the superior trade-off between sensitivity and specificity achieved by the $n-3$ sequential model across multiple independent spatial domains.}
 	\label{fig:pr_curve}
 \end{figure}

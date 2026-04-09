@@ -27,18 +27,23 @@ def compute_bunching(
     df = store.query_df(
         """
         SELECT
-            snapshot_ts,
-            vehicle_id,
-            direction_id,
-            stop_id,
-            stop_sequence,
-            latitude,
-            longitude
-        FROM vehicle_positions
-        WHERE route_id = ?
-          AND direction_id IS NOT NULL
-          AND stop_sequence IS NOT NULL
-        ORDER BY snapshot_ts, direction_id, stop_sequence
+            vp.snapshot_ts,
+            vp.vehicle_id,
+            vp.direction_id,
+            tu.stop_id,
+            vp.stop_sequence,
+            vp.latitude,
+            vp.longitude
+        FROM vehicle_positions AS vp
+        LEFT JOIN trip_updates AS tu
+            ON vp.snapshot_ts = tu.snapshot_ts
+           AND vp.trip_id = tu.trip_id
+           AND vp.stop_sequence = tu.stop_sequence
+           AND vp.route_id = tu.route_id
+        WHERE vp.route_id = ?
+          AND vp.direction_id IS NOT NULL
+          AND vp.stop_sequence IS NOT NULL
+        ORDER BY vp.snapshot_ts, vp.direction_id, vp.stop_sequence
         """,
         [route_id],
     )

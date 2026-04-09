@@ -11,7 +11,6 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multirow}
-\def\t{}
 
 \title{Marco Secuencial Espacio-Temporal para Señales de Alerta Temprana del Agrupamiento de Buses en Arquitecturas de Gemelos Digitales de Tránsito}
 
@@ -176,29 +175,6 @@ El modelo secuencial alcanzó F1-Score de 0.8234 ($\sigma=0.0109$, IC 95\%: $[0.
 
 Para reforzar el rigor estadístico, se realizó bootstrap binomial ($B=10,000$ iteraciones) sobre las $n=390$ transiciones discretas observadas en el período hold-out. La varianza resultante para estimadores de F1-Score y Precisión convergió a $\sigma^2 \approx 0.000120$. Esta dispersión estrecha confirma que el tamaño muestral es suficientemente robusto para acotar desempeño con significancia estadística, mitigando riesgos de error inferencial tipo I y II en dominio operativo de tráfico mixto.
 
-\subsection{Estudio de Ablación de la Profundidad de Ventana Secuencial}
-Para aislar el efecto de la profundidad temporal del codificador secuencial, evaluamos cinco configuraciones de rezago manteniendo fija la familia de clasificador y el protocolo de optimización.
-
-\begin{table}[htbp]
-	\t\caption{Estudio de Ablación: F1-Score por Profundidad de Ventana Secuencial}
-	\t\centering
-	\t\begin{tabular}{@{}lc@{}}
-		\t\t\toprule
-		\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
-		\t\t$n-1$            & 0.416             \\
-		\t\t$n-2$            & 0.425             \\
-		\t\t$n-3$            & 0.428             \\
-		\t\t$n-4$            & 0.427             \\
-		\t\t$n-5$            & 0.427             \\ \bottomrule
-		\t\end{tabular}
-	\t\label{tab:ablation}
-\end{table}
-
-La secuencia alcanza su pico matemático discreto en $n-3$ ($F1=0.428$): la primera diferencia finita es positiva hasta $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) y no positiva después ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), lo que indica que rezagos más profundos no agregan señal predictiva y saturan el desempeño.
-
-\subsection{Composición del Conjunto de Datos Post-Filtro}
-Antes del ajuste del modelo, el corpus longitudinal contenía 2,733,237 observaciones. Al aplicar el filtro estricto de estado de transición ($B_{n-1}=0$), se retuvieron 1,979,230 registros accionables. Dentro de este subconjunto filtrado, 1,466,017 corresponden a transiciones estables ($0 \rightarrow 0$), mientras que 513,213 corresponden a eventos críticos de deterioro ($0 \rightarrow 1$).
-
 \subsection{Generalización Espacial (Validación Cruzada Espacial)}
 Un requisito crítico para un algoritmo dentro de un DT regional es generalizar entre topografías distintas sin reentrenamiento específico por corredor. El modelo entrenado en Ruta 14 se probó directamente sobre Rutas 38 y 49.
 
@@ -229,8 +205,6 @@ Como muestra la Tabla \ref{tab:performance}, el modelo incluso rindió \textit{m
 
 \subsection{Análisis de Estabilidad Longitudinal}
 Para verificar que el predictor propuesto no está sobreajustado a la dinámica específica de febrero de 2026, extendimos la ventana de ingestión a tres meses (enero--marzo de 2026), obteniendo 2.73 millones de observaciones longitudinales en las Rutas 14, 38 y 49. Este análisis persigue dos objetivos: (i) evaluar si la geometría de señal aprendida por el modelo secuencial $n-3$ se mantiene estacionaria en el tiempo, y (ii) detectar posibles derivas estacionales que pudieran comprometer su despliegue continuo en un Gemelo Digital sincronizado en tiempo real.
-
-Más allá de la inspección visual, la prueba Augmented Dickey-Fuller (ADF) sobre la serie mensual del índice de agrupamiento arrojó $p=0.0077$ ($p<0.01$), rechazando formalmente la hipótesis de raíz unitaria y confirmando estacionariedad fuerte, no sólo una trayectoria visualmente plana.
 
 Antes de inspeccionar las gráficas mensuales, definimos formalmente el \textit{Proxy de Degradación Estacional de Estabilidad} (SSDP) para el mes $m$ respecto al mes base $m_0$ (enero de 2026) usando la mediana mensual del índice de agrupamiento:
 \begin{equation}

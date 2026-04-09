@@ -11,7 +11,6 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multirow}
-\def\t{}
 
 \title{Marco Secuencial Espacio-Temporal para Señales de Alerta Temprana del Agrupamiento de Buses en Arquitecturas de Gemelos Digitales de Tránsito}
 
@@ -180,18 +179,18 @@ Para reforzar el rigor estadístico, se realizó bootstrap binomial ($B=10,000$ 
 Para aislar el efecto de la profundidad temporal del codificador secuencial, evaluamos cinco configuraciones de rezago manteniendo fija la familia de clasificador y el protocolo de optimización.
 
 \begin{table}[htbp]
-	\t\caption{Estudio de Ablación: F1-Score por Profundidad de Ventana Secuencial}
-	\t\centering
-	\t\begin{tabular}{@{}lc@{}}
-		\t\t\toprule
-		\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
-		\t\t$n-1$            & 0.416             \\
-		\t\t$n-2$            & 0.425             \\
-		\t\t$n-3$            & 0.428             \\
-		\t\t$n-4$            & 0.427             \\
-		\t\t$n-5$            & 0.427             \\ \bottomrule
-		\t\end{tabular}
-	\t\label{tab:ablation}
+\t\caption{Estudio de Ablación: F1-Score por Profundidad de Ventana Secuencial}
+\t\centering
+\t\begin{tabular}{@{}lc@{}}
+\t\t\toprule
+\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
+\t\t$n-1$            & 0.416             \\
+\t\t$n-2$            & 0.425             \\
+\t\t$n-3$            & 0.428             \\
+\t\t$n-4$            & 0.427             \\
+\t\t$n-5$            & 0.427             \\ \bottomrule
+\t\end{tabular}
+\t\label{tab:ablation}
 \end{table}
 
 La secuencia alcanza su pico matemático discreto en $n-3$ ($F1=0.428$): la primera diferencia finita es positiva hasta $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) y no positiva después ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), lo que indica que rezagos más profundos no agregan señal predictiva y saturan el desempeño.

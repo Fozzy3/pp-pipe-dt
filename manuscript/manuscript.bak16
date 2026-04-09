@@ -10,7 +10,6 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multirow}
-\def\t{}
 
 \title{Spatio-Temporal Sequential Framework for Early Warning Signals of Bus Bunching in Transit Digital Twin Architectures}
 
@@ -179,18 +178,18 @@ To further substantiate the statistical rigor of these metrics, a binomial boots
 To isolate the effect of temporal depth in the sequential encoder, we evaluated five lag configurations while keeping the classifier family and optimization protocol fixed.
 
 \begin{table}[htbp]
-	\t\caption{Ablation Study: F1-Score by Sequential Window Depth}
-	\t\centering
-	\t\begin{tabular}{@{}lc@{}}
-		\t\t\toprule
-		\t\t\textbf{Window} & \textbf{F1-Score} \\ \midrule
-		\t\t$n-1$           & 0.416             \\
-		\t\t$n-2$           & 0.425             \\
-		\t\t$n-3$           & 0.428             \\
-		\t\t$n-4$           & 0.427             \\
-		\t\t$n-5$           & 0.427             \\ \bottomrule
-		\t\end{tabular}
-	\t\label{tab:ablation}
+\t\caption{Ablation Study: F1-Score by Sequential Window Depth}
+\t\centering
+\t\begin{tabular}{@{}lc@{}}
+\t\t\toprule
+\t\t\textbf{Window} & \textbf{F1-Score} \\ \midrule
+\t\t$n-1$           & 0.416             \\
+\t\t$n-2$           & 0.425             \\
+\t\t$n-3$           & 0.428             \\
+\t\t$n-4$           & 0.427             \\
+\t\t$n-5$           & 0.427             \\ \bottomrule
+\t\end{tabular}
+\t\label{tab:ablation}
 \end{table}
 
 The sequence reaches its discrete mathematical peak at $n-3$ ($F1=0.428$): the first finite difference is positive up to $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) and non-positive afterwards ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), indicating that deeper lags do not add predictive signal and instead saturate performance.

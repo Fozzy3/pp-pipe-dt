@@ -36,38 +36,45 @@
 \@writefile{toc}{\contentsline {section}{\numberline {III}System Architecture and Methodology}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Digital Twin Data Pipeline}{2}{}\protected@file@percent }
 \citation{1,10}
-\citation{28}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Mathematical Formulation of System States}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Spatio-Temporal Feature Engineering ($n-3$ Window)}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Transition State Filter and Persistence Bias Elimination}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Optimization and Regularization}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Dataset Description}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Conformal Prediction for Operational Uncertainty Control}{3}{}\protected@file@percent }
+\citation{28}
 \citation{17}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Dataset Description}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Temporal Isolation and Spatial Cross-Validation}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Evaluation Metrics}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {V}Results}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Baseline Analysis (Single-Stop Threshold)}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Predictive Performance of the Sequential Framework}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Spatial Generalization (Transfer Learning)}{4}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Model Performance Metrics across Spatial Domains}}{4}{}\protected@file@percent }
-\newlabel{tab:performance}{{I}{4}{}{table.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Precision-Recall (PR) curves demonstrating the superior trade-off between sensitivity and specificity achieved by the $n-3$ sequential model across multiple independent spatial domains.}}{4}{}\protected@file@percent }
-\newlabel{fig:pr_curve}{{1}{4}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Ablation Study of Sequential Window Depth}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Ablation Study: F1-Score by Sequential Window Depth}}{4}{}\protected@file@percent }
+\newlabel{tab:ablation}{{I}{4}{}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Post-Filter Dataset Composition}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Spatial Generalization (Spatial Cross-Validation)}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Model Performance Metrics across Spatial Domains}}{5}{}\protected@file@percent }
+\newlabel{tab:performance}{{II}{5}{}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Longitudinal Stability Analysis}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Precision-Recall (PR) curves demonstrating the superior trade-off between sensitivity and specificity achieved by the $n-3$ sequential model across multiple independent spatial domains.}}{5}{}\protected@file@percent }
+\newlabel{fig:pr_curve}{{1}{5}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-G}}Feature Importance and the Physics of Collapse}{5}{}\protected@file@percent }
 \citation{1}
 \citation{26}
 \citation{10}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Longitudinal Stability Analysis}{5}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Longitudinal bunching-index trajectory for SF Muni Route 14 (January--March 2026), showing stable central tendency and bounded variance across months.}}{5}{}\protected@file@percent }
-\newlabel{fig:longitudinal_bi_14}{{2}{5}{}{figure.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Feature Importance and the Physics of Collapse}{5}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Longitudinal headway-drift profile for Route 14. Persistent negative excursions remain the dominant precursor of collapse transitions over time.}}{5}{}\protected@file@percent }
-\newlabel{fig:longitudinal_hd_14}{{3}{5}{}{figure.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Seasonal degradation diagnostic for Route 14, confirming no critical temporal instability that would invalidate continuous deployment of the sequential EWS framework.}}{5}{}\protected@file@percent }
-\newlabel{fig:longitudinal_sd_14}{{4}{5}{}{figure.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Computational Benchmark for Edge Deployment}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion and Future Work}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Operational Lead Time}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Longitudinal bunching-index trajectory for SF Muni Route 14 (January--March 2026), showing stable central tendency and bounded variance across months.}}{6}{}\protected@file@percent }
+\newlabel{fig:longitudinal_bi_14}{{2}{6}{}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Longitudinal headway-drift profile for Route 14. Persistent negative excursions remain the dominant precursor of collapse transitions over time.}}{6}{}\protected@file@percent }
+\newlabel{fig:longitudinal_hd_14}{{3}{6}{}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Seasonal degradation diagnostic for Route 14, confirming no critical temporal instability that would invalidate continuous deployment of the sequential EWS framework.}}{6}{}\protected@file@percent }
+\newlabel{fig:longitudinal_sd_14}{{4}{6}{}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-H}}Computational Benchmark for Edge Deployment}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion and Future Work}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Operational Lead Time}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Limitations in Mixed-Traffic Environments}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Resilience and API Limitations}{6}{}\protected@file@percent }
 \citation{10,29}
 \citation{30}
 \citation{10}
@@ -79,11 +86,6 @@
 \bibcite{6}{6}
 \bibcite{7}{7}
 \bibcite{8}{8}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Limitations in Mixed-Traffic Environments}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Resilience and API Limitations}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Transition to Bus Rapid Transit (BRT) Systems}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
 \bibcite{9}{9}
 \bibcite{10}{10}
 \bibcite{11}{11}
@@ -96,6 +98,9 @@
 \bibcite{18}{18}
 \bibcite{19}{19}
 \bibcite{20}{20}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Transition to Bus Rapid Transit (BRT) Systems}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{7}{}\protected@file@percent }
 \bibcite{21}{21}
 \bibcite{22}{22}
 \bibcite{23}{23}
@@ -106,4 +111,4 @@
 \bibcite{28}{28}
 \bibcite{29}{29}
 \bibcite{30}{30}
-\gdef \@abspage@last{7}
+\gdef \@abspage@last{8}

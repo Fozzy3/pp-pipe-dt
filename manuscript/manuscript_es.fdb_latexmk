@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1775748789.43952 "manuscript.tex" "manuscript.pdf" "manuscript" 1775748790.34826 0
+["pdflatex"] 1775748791.42521 "manuscript_es.tex" "manuscript_es.pdf" "manuscript_es" 1775748792.42589 0
   "../data/outputs/fig6_pr_curve.pdf" 1775743002.73885 18522 c92387469934d7dc5175c950f55b9755 ""
   "../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf" 1775746267.95351 13671 069d70fc897f8259ab8768eb04beb561 ""
   "../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf" 1775746268.12919 15983 59a57a9ed72ae89aac5805207be9ada7 ""
@@ -68,6 +68,11 @@
   "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf" 1136768653 1948 7330aeef3af211edff3b35fb2c12a0fd ""
   "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf" 1136768653 1384 a9d8adaf491ce34e5fba99dc7bbe5f39 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
+  "/usr/share/texlive/texmf-dist/tex/generic/babel-spanish/spanish.ldf" 1622145181 26965 3b6d1655ad716f98e788b1fb9f2e87b8 ""
+  "/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty" 1739572459 143388 b008e1666520ff43d0878397f2926242 ""
+  "/usr/share/texlive/texmf-dist/tex/generic/babel/locale/es/babel-es.ini" 1663444672 4345 33a8cc6f0a7c6afcb84895b2c963a4e5 ""
+  "/usr/share/texlive/texmf-dist/tex/generic/babel/locale/es/babel-spanish.tex" 1498512262 336 a1c472f674f6f0c25a2c95ad8c7ad024 ""
+  "/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def" 1735765002 6945 a248d839b1f26b388440c973966647b5 ""
   "/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty" 1734129479 7984 7dbb9280f03c0a315425f1b4f35d43ee ""
   "/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty" 1575499628 8356 7bbb2c2373aa810be568c29e333da8ed ""
   "/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty" 1701727651 17865 1a9bd36b4f98178fa551aca822290953 ""
@@ -107,16 +112,16 @@
   "/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd" 1137110629 961 15056f4a61917ceed3a44e4ac11fcc52 ""
   "/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty" 1740687122 340829 1b2c1d1f1f03e683fab4091869acffd3 ""
   "/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty" 1730496337 14552 27664839421e418b87f56fa4c6f66b1a ""
-  "/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictionary-english.trsl" 1644096163 5588 0c1628daf15f4411ff1f463114c634a3 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictionary-spanish.trsl" 1644096163 5850 2ef40dd7b6b9ada125cd1d90b7f7b307 ""
   "/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty" 1644096163 44247 2188b95d0ee74e31eca4d316263c58a7 ""
   "/usr/share/texlive/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1772581453 5467255 9a64d1b40e0b893fc5588ecce9d8accf ""
-  "manuscript.aux" 1775748790.23564 7096 d9ae651c22bcc4808025ac3463ac9958 "pdflatex"
-  "manuscript.tex" 1775748778.69467 44055 af3399ab84782085a1230b1340d7e14d ""
+  "manuscript_es.aux" 1775748792.30862 7579 1ab0b19917d609fa24f8c4d428628d5a "pdflatex"
+  "manuscript_es.tex" 1775748784.63817 45543 9982a9fb12c26b75c5b8c1981771e1c4 ""
   (generated)
-  "manuscript.aux"
-  "manuscript.log"
-  "manuscript.pdf"
+  "manuscript_es.aux"
+  "manuscript_es.log"
+  "manuscript_es.pdf"
   (rewritten before read)

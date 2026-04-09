@@ -12,6 +12,9 @@ import duckdb
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import f1_score
+from statsmodels.tsa.stattools import adfuller
 
 from pipeline.config import get_settings
 
@@ -96,7 +99,7 @@ def query_monthly_bunching(
                     + COALESCE(TRY_CAST(split_part(COALESCE(observed_departure_time, observed_arrival_time), ':', 3) AS INTEGER), 0)
             END AS event_seconds
         FROM {relation}
-        WHERE route_id = ?
+        WHERE (route_id = ? OR regexp_extract(route_id, '([^:]+)$', 1) = ?)
           AND year IS NOT NULL
           AND month IS NOT NULL
     ),
@@ -134,7 +137,7 @@ def query_monthly_bunching(
     GROUP BY year, month, route_id
     ORDER BY year, month
     """
-    return conn.execute(sql, [route_id, bunching_threshold, bunching_threshold]).fetchdf()
+    return conn.execute(sql, [route_id, route_id, bunching_threshold, bunching_threshold]).fetchdf()
 
 
 def query_monthly_headway_drift(
@@ -163,7 +166,7 @@ def query_monthly_headway_drift(
                     + COALESCE(TRY_CAST(split_part(COALESCE(observed_departure_time, observed_arrival_time), ':', 3) AS INTEGER), 0)
             END AS event_seconds
         FROM {relation}
-        WHERE route_id = ?
+        WHERE (route_id = ? OR regexp_extract(route_id, '([^:]+)$', 1) = ?)
           AND year IS NOT NULL
           AND month IS NOT NULL
     ),
@@ -224,7 +227,7 @@ def query_monthly_headway_drift(
     GROUP BY year, month, route_id
     ORDER BY year, month
     """
-    return conn.execute(sql, [route_id]).fetchdf()
+    return conn.execute(sql, [route_id, route_id]).fetchdf()
 
 
 def add_time_index(df: pd.DataFrame) -> pd.DataFrame:
@@ -255,6 +258,275 @@ def compute_seasonal_stability(monthly_headway: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def query_transition_rows(
+    conn: duckdb.DuckDBPyConnection,
+    *,
+    relation: str,
+    bunching_threshold: int,
+    routes: list[str],
+) -> pd.DataFrame:
+    route_filter = ""
+    params: list[object] = []
+    if routes:
+        placeholders = ", ".join(["?"] * len(routes))
+        route_filter = (
+            "AND (route_id IN ("
+            + placeholders
+            + ") OR regexp_extract(route_id, '([^:]+)$', 1) IN ("
+            + placeholders
+            + "))"
+        )
+        params.extend(routes)
+        params.extend(routes)
+
+    sql = f"""
+    WITH base AS (
+        SELECT
+            CAST(year AS INTEGER) AS year,
+            CAST(month AS INTEGER) AS month,
+            route_id,
+            CAST(service_date AS VARCHAR) AS service_date,
+            vehicle_id,
+            TRY_CAST(stop_sequence AS INTEGER) AS stop_sequence_int,
+            CASE
+                WHEN COALESCE(observed_departure_time, observed_arrival_time) IS NULL THEN NULL
+                ELSE
+                    COALESCE(TRY_CAST(split_part(COALESCE(observed_departure_time, observed_arrival_time), ':', 1) AS INTEGER), 0) * 3600
+                    + COALESCE(TRY_CAST(split_part(COALESCE(observed_departure_time, observed_arrival_time), ':', 2) AS INTEGER), 0) * 60
+                    + COALESCE(TRY_CAST(split_part(COALESCE(observed_departure_time, observed_arrival_time), ':', 3) AS INTEGER), 0)
+            END AS event_seconds
+        FROM {relation}
+        WHERE year IS NOT NULL
+          AND month IS NOT NULL
+          {route_filter}
+    ),
+    stop_events AS (
+        SELECT
+            *,
+            LAG(event_seconds) OVER (
+                PARTITION BY year, month, route_id, service_date, stop_sequence_int
+                ORDER BY event_seconds, vehicle_id
+            ) AS prev_seconds
+        FROM base
+    ),
+    stop_gaps AS (
+        SELECT
+            year,
+            month,
+            route_id,
+            service_date,
+            vehicle_id,
+            stop_sequence_int,
+            event_seconds,
+            event_seconds - prev_seconds AS gap_seconds
+        FROM stop_events
+        WHERE stop_sequence_int IS NOT NULL
+          AND event_seconds IS NOT NULL
+          AND prev_seconds IS NOT NULL
+          AND (event_seconds - prev_seconds) > 0
+          AND (event_seconds - prev_seconds) <= 7200
+    ),
+    transitions AS (
+        SELECT
+            year,
+            month,
+            route_id,
+            service_date,
+            vehicle_id,
+            stop_sequence_int,
+            event_seconds,
+            gap_seconds,
+            CASE WHEN gap_seconds <= ? THEN 1 ELSE 0 END AS is_bunching,
+            LAG(CASE WHEN gap_seconds <= ? THEN 1 ELSE 0 END, 1) OVER w AS b_n1,
+            LAG(CASE WHEN gap_seconds <= ? THEN 1 ELSE 0 END, 2) OVER w AS b_n2,
+            LAG(CASE WHEN gap_seconds <= ? THEN 1 ELSE 0 END, 3) OVER w AS b_n3,
+            LAG(CASE WHEN gap_seconds <= ? THEN 1 ELSE 0 END, 4) OVER w AS b_n4,
+            LAG(CASE WHEN gap_seconds <= ? THEN 1 ELSE 0 END, 5) OVER w AS b_n5,
+            LAG(gap_seconds, 1) OVER w AS g_n1,
+            LAG(gap_seconds, 2) OVER w AS g_n2,
+            LAG(gap_seconds, 3) OVER w AS g_n3,
+            LAG(gap_seconds, 4) OVER w AS g_n4,
+            LAG(gap_seconds, 5) OVER w AS g_n5
+        FROM stop_gaps
+        WINDOW w AS (
+            PARTITION BY route_id, service_date, vehicle_id
+            ORDER BY stop_sequence_int, event_seconds
+        )
+    )
+    SELECT *
+    FROM transitions
+    WHERE b_n1 IS NOT NULL
+    ORDER BY year, month, route_id, service_date, vehicle_id, stop_sequence_int, event_seconds
+    """
+    threshold_params = [bunching_threshold] * 6
+    return conn.execute(sql, [*params, *threshold_params]).fetchdf()
+
+
+def compute_post_filter_stats(transition_rows: pd.DataFrame) -> dict[str, int | float]:
+    if transition_rows.empty:
+        return {
+            "total_transition_rows": 0,
+            "filtered_total_bn1_eq_0": 0,
+            "class_0_to_0": 0,
+            "class_0_to_1": 0,
+            "filtered_ratio_pct": 0.0,
+        }
+
+    filtered = transition_rows[transition_rows["b_n1"] == 0]
+    total_rows = int(len(transition_rows))
+    filtered_total = int(len(filtered))
+    class_0_to_0 = int((filtered["is_bunching"] == 0).sum())
+    class_0_to_1 = int((filtered["is_bunching"] == 1).sum())
+
+    return {
+        "total_transition_rows": total_rows,
+        "filtered_total_bn1_eq_0": filtered_total,
+        "class_0_to_0": class_0_to_0,
+        "class_0_to_1": class_0_to_1,
+        "filtered_ratio_pct": (filtered_total / total_rows * 100.0) if total_rows else 0.0,
+    }
+
+
+def compute_ablation_f1(transition_rows: pd.DataFrame) -> list[dict[str, int | float]]:
+    results: list[dict[str, int | float]] = []
+    if transition_rows.empty:
+        return results
+
+    base = transition_rows[transition_rows["b_n1"] == 0].copy()
+    base = base.sort_values(
+        [
+            "year",
+            "month",
+            "route_id",
+            "service_date",
+            "vehicle_id",
+            "stop_sequence_int",
+            "event_seconds",
+        ]
+    ).reset_index(drop=True)
+
+    for window in range(1, 6):
+        feature_cols = [f"g_n{i}" for i in range(1, window + 1)] + [
+            f"b_n{i}" for i in range(1, window + 1)
+        ]
+        subset = base.dropna(subset=feature_cols + ["is_bunching"]).copy()
+
+        if len(subset) < 200:
+            results.append(
+                {
+                    "window": window,
+                    "f1": float("nan"),
+                    "train_rows": 0,
+                    "test_rows": 0,
+                }
+            )
+            continue
+
+        split_idx = int(len(subset) * 0.8)
+        if split_idx <= 0 or split_idx >= len(subset):
+            results.append(
+                {
+                    "window": window,
+                    "f1": float("nan"),
+                    "train_rows": 0,
+                    "test_rows": 0,
+                }
+            )
+            continue
+
+        train = subset.iloc[:split_idx]
+        test = subset.iloc[split_idx:]
+        y_train = train["is_bunching"].astype(int)
+        y_test = test["is_bunching"].astype(int)
+
+        if y_train.nunique() < 2 or y_test.nunique() < 2:
+            results.append(
+                {
+                    "window": window,
+                    "f1": float("nan"),
+                    "train_rows": int(len(train)),
+                    "test_rows": int(len(test)),
+                }
+            )
+            continue
+
+        model = LogisticRegression(max_iter=300, class_weight="balanced", solver="lbfgs")
+        model.fit(train[feature_cols].astype(float), y_train)
+        preds = model.predict(test[feature_cols].astype(float))
+        score = f1_score(y_test, preds, zero_division=0)
+
+        results.append(
+            {
+                "window": window,
+                "f1": float(score),
+                "train_rows": int(len(train)),
+                "test_rows": int(len(test)),
+            }
+        )
+
+    return results
+
+
+def compute_adf_pvalue(transition_rows: pd.DataFrame) -> float:
+    if transition_rows.empty:
+        return float("nan")
+
+    daily = (
+        transition_rows.groupby(["year", "month", "service_date"], as_index=False)["is_bunching"]
+        .mean()
+        .rename(columns={"is_bunching": "daily_bunching_index"})
+    )
+    daily["period"] = pd.to_datetime(daily["service_date"], errors="coerce")
+    daily = daily.dropna(subset=["period"]).sort_values("period")
+    series = daily["daily_bunching_index"].astype(float).dropna()
+
+    if len(series) < 4:
+        return float("nan")
+
+    try:
+        _, pvalue, *_ = adfuller(series)
+        return float(pvalue)
+    except ValueError:
+        return float("nan")
+
+
+def write_professor_metrics(
+    *,
+    metrics_path: Path,
+    adf_pvalue: float,
+    post_filter_stats: dict[str, int | float],
+    ablation_metrics: list[dict[str, int | float]],
+    total_observations: int,
+) -> None:
+    lines = [
+        "Longitudinal Data Science Metrics",
+        "===============================",
+        f"Total observations in longitudinal view: {total_observations}",
+        "",
+        "ADF test (monthly bunching index, weighted across analyzed routes)",
+        f"ADF p-value: {adf_pvalue:.10f}" if not pd.isna(adf_pvalue) else "ADF p-value: NaN",
+        "",
+        "Post-filter stats (Transition filter: B_{n-1} = 0)",
+        f"Total rows with lag available: {post_filter_stats['total_transition_rows']}",
+        f"Total rows where B_(n-1)=0: {post_filter_stats['filtered_total_bn1_eq_0']}",
+        f"Class 0->0 count: {post_filter_stats['class_0_to_0']}",
+        f"Class 0->1 count: {post_filter_stats['class_0_to_1']}",
+        f"Filtered ratio (%): {post_filter_stats['filtered_ratio_pct']:.6f}",
+        "",
+        "Ablation study (F1 by window size)",
+    ]
+
+    for item in ablation_metrics:
+        window = item["window"]
+        f1 = item["f1"]
+        f1_text = f"{f1:.6f}" if not pd.isna(f1) else "NaN"
+        lines.append(
+            f"n-{window}: F1={f1_text} | train_rows={item['train_rows']} | test_rows={item['test_rows']}"
+        )
+
+    metrics_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def plot_bunching_index(df: pd.DataFrame, *, route_id: str, output_dir: Path) -> None:
     if df.empty:
         return
@@ -263,6 +535,7 @@ def plot_bunching_index(df: pd.DataFrame, *, route_id: str, output_dir: Path) ->
     ax.set_title(f"Route {route_id} — Monthly Bunching Index")
     ax.set_xlabel("Month")
     ax.set_ylabel("Bunching Index")
+    ax.set_ylim(bottom=0)
     ax.grid(True, linestyle="--", alpha=0.35)
     fig.autofmt_xdate()
     fig.savefig(output_dir / f"longitudinal_bunching_index_{route_id}.pdf")
@@ -284,6 +557,7 @@ def plot_headway_drift(df: pd.DataFrame, *, route_id: str, output_dir: Path) -> 
     ax.set_title(f"Route {route_id} — Monthly Headway Drift")
     ax.set_xlabel("Month")
     ax.set_ylabel("Mean Absolute Drift (seconds)")
+    ax.set_ylim(bottom=0)
     ax.grid(True, linestyle="--", alpha=0.35)
     fig.autofmt_xdate()
     fig.savefig(output_dir / f"longitudinal_headway_drift_{route_id}.pdf")
@@ -305,6 +579,7 @@ def plot_seasonal_degradation(df: pd.DataFrame, *, route_id: str, output_dir: Pa
     ax.set_title(f"Route {route_id} — Seasonal Stability Degradation (Proxy)")
     ax.set_xlabel("Month")
     ax.set_ylabel("Degradation (%)")
+    ax.set_ylim(bottom=0)
     ax.grid(True, linestyle="--", alpha=0.35)
     fig.autofmt_xdate()
     fig.savefig(output_dir / f"longitudinal_seasonal_degradation_{route_id}.pdf")
@@ -386,6 +661,27 @@ def main() -> None:
                 monthly_headway.to_csv(output_dir / f"monthly_headway_{route_id}.csv", index=False)
 
             logger.info("Saved longitudinal outputs for route %s in %s", route_id, output_dir)
+
+        transition_rows = query_transition_rows(
+            conn,
+            relation=relation,
+            bunching_threshold=args.bunching_threshold,
+            routes=routes,
+        )
+        post_filter_stats = compute_post_filter_stats(transition_rows)
+        ablation_metrics = compute_ablation_f1(transition_rows)
+        adf_pvalue = compute_adf_pvalue(transition_rows)
+        total_observations = int(conn.execute(f"SELECT COUNT(*) FROM {relation}").fetchone()[0])
+
+        metrics_path = settings.resolve_path(Path("professor_metrics.txt"))
+        write_professor_metrics(
+            metrics_path=metrics_path,
+            adf_pvalue=adf_pvalue,
+            post_filter_stats=post_filter_stats,
+            ablation_metrics=ablation_metrics,
+            total_observations=total_observations,
+        )
+        logger.info("Saved professor metrics to %s", metrics_path)
     finally:
         conn.close()
 

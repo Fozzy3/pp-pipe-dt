@@ -11,7 +11,6 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multirow}
-\def\t{}
 
 \title{Marco Secuencial Espacio-Temporal para Señales de Alerta Temprana del Agrupamiento de Buses en Arquitecturas de Gemelos Digitales de Tránsito}
 
@@ -134,11 +133,11 @@ Las predicciones puntuales son insuficientes para decisiones de despacho de alto
 
 Sea $s(x)=1-\hat{p}(x)$ el puntaje de no conformidad para la clase positiva, donde $\hat{p}(x)=P(B_n=1\mid B_{n-1}=0, X_n)$. Para una no cobertura objetivo $\alpha\in(0,1)$ y un conjunto de calibración de tamaño $N_{cal}$, el umbral cuantil es
 \begin{equation}
-	q_{1-\alpha}=\text{Cuantil}_{\lceil (N_{cal}+1)(1-\alpha)\rceil /N_{cal}}\left(\{s_i\}_{i=1}^{N_{cal}}\right).
+q_{1-\alpha}=\text{Cuantil}_{\lceil (N_{cal}+1)(1-\alpha)\rceil /N_{cal}}\left(\{s_i\}_{i=1}^{N_{cal}}\right).
 \end{equation}
 El conjunto conformal para una observación nueva $x$ se define como
 \begin{equation}
-	\Gamma_{\alpha}(x)=\{1\ \text{si}\ s(x)\le q_{1-\alpha};\ 0\ \text{si}\ 1-s(x)\le q_{1-\alpha}\}.
+\Gamma_{\alpha}(x)=\{1\ \text{si}\ s(x)\le q_{1-\alpha};\ 0\ \text{si}\ 1-s(x)\le q_{1-\alpha}\}.
 \end{equation}
 Este mecanismo convierte la EWS en una capa de decisión consciente de incertidumbre: conjuntos singleton activan acciones de alta confianza, mientras conjuntos ambiguos señalan explícitamente casos de baja confianza para control conservador.
 
@@ -151,13 +150,13 @@ Tras aplicar el protocolo estricto de deduplicación de la Sección III.A, el co
 \begin{itemize}
 	\item \textbf{Ruta 14 (Mission St):} corredor primario para entrenamiento y validación temporal, caracterizado por zonificación comercial densa y alto ruido de tráfico exógeno.
 	\item \textbf{Ruta 38 (Geary Blvd):} corredor arterial independiente utilizado para validación cruzada espacial.
-	\item \textbf{Ruta 49 (Van Ness Ave):} corredor norte-sur altamente congestionado, también usado para validación cruzada espacial.
+	\item \textbf{Ruta 49 (Van Ness Ave):} corredor norte-sur altamente congestionado, también usado para transferencia espacial.
 \end{itemize}
 
 \subsection{Aislamiento Temporal y Validación Cruzada Espacial}
 Para prevenir fuga temporal de datos (modelos observando patrones futuros para predecir eventos pasados), el dataset se particionó estrictamente de forma cronológica. Para el modelo base y el entrenamiento principal sobre Ruta 14, los datos del 1 al 21 de febrero conformaron entrenamiento, mientras que los del 22 al 28 de febrero se reservaron como prueba hold-out.
 
-En validación cruzada espacial, el modelo entrenado \textit{exclusivamente} en Ruta 14 (hasta el 21 de febrero) se desplegó para inferir transiciones en Rutas 38 y 49 sin reentrenamiento ni ajuste de pesos.
+En validación espacial (evaluación de transferencia), el modelo entrenado \textit{exclusivamente} en Ruta 14 (hasta el 21 de febrero) se desplegó para inferir transiciones en Rutas 38 y 49 sin reentrenamiento ni ajuste de pesos.
 
 \subsection{Métricas de Evaluación}
 Dado que el dataset está fuertemente sesgado hacia la clase nominal, la exactitud (Accuracy) es engañosa. Evaluamos con Precisión, Recall (True Positive Rate), media armónica F1-Score y área bajo la curva Precisión-Recall (PR-AUC) \cite{17}.
@@ -176,29 +175,6 @@ El modelo secuencial alcanzó F1-Score de 0.8234 ($\sigma=0.0109$, IC 95\%: $[0.
 
 Para reforzar el rigor estadístico, se realizó bootstrap binomial ($B=10,000$ iteraciones) sobre las $n=390$ transiciones discretas observadas en el período hold-out. La varianza resultante para estimadores de F1-Score y Precisión convergió a $\sigma^2 \approx 0.000120$. Esta dispersión estrecha confirma que el tamaño muestral es suficientemente robusto para acotar desempeño con significancia estadística, mitigando riesgos de error inferencial tipo I y II en dominio operativo de tráfico mixto.
 
-\subsection{Estudio de Ablación de la Profundidad de Ventana Secuencial}
-Para aislar el efecto de la profundidad temporal del codificador secuencial, evaluamos cinco configuraciones de rezago manteniendo fija la familia de clasificador y el protocolo de optimización.
-
-\begin{table}[htbp]
-	\t\caption{Estudio de Ablación: F1-Score por Profundidad de Ventana Secuencial}
-	\t\centering
-	\t\begin{tabular}{@{}lc@{}}
-		\t\t\toprule
-		\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
-		\t\t$n-1$            & 0.416             \\
-		\t\t$n-2$            & 0.425             \\
-		\t\t$n-3$            & 0.428             \\
-		\t\t$n-4$            & 0.427             \\
-		\t\t$n-5$            & 0.427             \\ \bottomrule
-		\t\end{tabular}
-	\t\label{tab:ablation}
-\end{table}
-
-La secuencia alcanza su pico matemático discreto en $n-3$ ($F1=0.428$): la primera diferencia finita es positiva hasta $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) y no positiva después ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), lo que indica que rezagos más profundos no agregan señal predictiva y saturan el desempeño.
-
-\subsection{Composición del Conjunto de Datos Post-Filtro}
-Antes del ajuste del modelo, el corpus longitudinal contenía 2,733,237 observaciones. Al aplicar el filtro estricto de estado de transición ($B_{n-1}=0$), se retuvieron 1,979,230 registros accionables. Dentro de este subconjunto filtrado, 1,466,017 corresponden a transiciones estables ($0 \rightarrow 0$), mientras que 513,213 corresponden a eventos críticos de deterioro ($0 \rightarrow 1$).
-
 \subsection{Generalización Espacial (Validación Cruzada Espacial)}
 Un requisito crítico para un algoritmo dentro de un DT regional es generalizar entre topografías distintas sin reentrenamiento específico por corredor. El modelo entrenado en Ruta 14 se probó directamente sobre Rutas 38 y 49.
 
@@ -207,13 +183,13 @@ Un requisito crítico para un algoritmo dentro de un DT regional es generalizar 
 	\centering
 	\begin{tabular}{@{}lccc@{}}
 		\toprule
-		\textbf{Métrica}     & \textbf{Ruta 14}    & \textbf{Ruta 38}              & \textbf{Ruta 49}              \\
-		                     & (Hold-out temporal) & (Validación cruzada espacial) & (Validación cruzada espacial) \\ \midrule
-		Total de muestras    & 11,811              & 46,007                        & 55,637                        \\
-		F1-Score ($\pm$ IC)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014            & 0.8576 $\pm$ 0.013            \\
-		Precisión ($\pm$ IC) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008            & 0.9642 $\pm$ 0.007            \\
-		Recall               & 0.7241              & 0.7689                        & 0.7712                        \\
-		PR-AUC               & 0.765               & 0.792                         & 0.795                         \\ \bottomrule
+		\textbf{Métrica}     & \textbf{Ruta 14}    & \textbf{Ruta 38}   & \textbf{Ruta 49}   \\
+		                     & (Hold-out temporal) & (Validación cruzada espacial) & (Validación cruzada espacial)    \\ \midrule
+		Total de muestras    & 11,811              & 46,007             & 55,637             \\
+		F1-Score ($\pm$ IC)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014 & 0.8576 $\pm$ 0.013 \\
+		Precisión ($\pm$ IC) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008 & 0.9642 $\pm$ 0.007 \\
+		Recall               & 0.7241              & 0.7689             & 0.7712             \\
+		PR-AUC               & 0.765               & 0.792              & 0.795              \\ \bottomrule
 	\end{tabular}
 	\label{tab:performance}
 \end{table}
@@ -230,11 +206,9 @@ Como muestra la Tabla \ref{tab:performance}, el modelo incluso rindió \textit{m
 \subsection{Análisis de Estabilidad Longitudinal}
 Para verificar que el predictor propuesto no está sobreajustado a la dinámica específica de febrero de 2026, extendimos la ventana de ingestión a tres meses (enero--marzo de 2026), obteniendo 2.73 millones de observaciones longitudinales en las Rutas 14, 38 y 49. Este análisis persigue dos objetivos: (i) evaluar si la geometría de señal aprendida por el modelo secuencial $n-3$ se mantiene estacionaria en el tiempo, y (ii) detectar posibles derivas estacionales que pudieran comprometer su despliegue continuo en un Gemelo Digital sincronizado en tiempo real.
 
-Más allá de la inspección visual, la prueba Augmented Dickey-Fuller (ADF) sobre la serie mensual del índice de agrupamiento arrojó $p=0.0077$ ($p<0.01$), rechazando formalmente la hipótesis de raíz unitaria y confirmando estacionariedad fuerte, no sólo una trayectoria visualmente plana.
-
 Antes de inspeccionar las gráficas mensuales, definimos formalmente el \textit{Proxy de Degradación Estacional de Estabilidad} (SSDP) para el mes $m$ respecto al mes base $m_0$ (enero de 2026) usando la mediana mensual del índice de agrupamiento:
 \begin{equation}
-	\mathrm{SSDP}_{m}=\frac{\widetilde{B}_{m}-\widetilde{B}_{m_0}}{\widetilde{B}_{m_0}}\times 100\%,
+\mathrm{SSDP}_{m}=\frac{\widetilde{B}_{m}-\widetilde{B}_{m_0}}{\widetilde{B}_{m_0}}\times 100\%,
 \end{equation}
 donde $\widetilde{B}_{m}$ es la mediana del índice de agrupamiento en el mes $m$. Valores positivos indican degradación (más agrupamiento), mientras valores cercanos a cero indican estabilidad longitudinal.
 

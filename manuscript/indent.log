@@ -1,6 +1,6 @@
 INFO:  latexindent version 3.24.4, 2024-07-18, a script to indent .tex files
        latexindent lives here: /usr/share/texlive/texmf-dist/scripts/latexindent/
-       Thu Apr  9 10:08:21 2026
+       Thu Apr  9 10:33:04 2026
        Filename: /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.tex
 INFO:  Processing switches:
        -s|--silent: Silent mode active (you have used either -s or --silent)
@@ -16,7 +16,11 @@ INFO:  YAML reading settings
 INFO:  Backup procedure (-w flag active):
        /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak0 already exists, incrementing by 1 (see maxNumberOfBackUps)
        /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak1 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       Backing up /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.tex to /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak2...
+       /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak2 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak3 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak4 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak5 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       Backing up /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.tex to /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.bak6...
        /home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript_es.tex will be overwritten after indentation
 INFO:  Phase 1: searching for objects
 INFO:  Phase 2: finding surrounding indentation

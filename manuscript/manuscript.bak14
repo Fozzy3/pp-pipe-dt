@@ -10,7 +10,6 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multirow}
-\def\t{}
 
 \title{Spatio-Temporal Sequential Framework for Early Warning Signals of Bus Bunching in Transit Digital Twin Architectures}
 
@@ -133,11 +132,11 @@ Point predictions alone are insufficient for high-stakes dispatch decisions beca
 
 Let $s(x)=1-\hat{p}(x)$ be the nonconformity score for the positive class, where $\hat{p}(x)=P(B_n=1\mid B_{n-1}=0, X_n)$. For target miscoverage $\alpha\in(0,1)$ and calibration set of size $N_{cal}$, the quantile threshold is
 \begin{equation}
-	q_{1-\alpha}=\text{Quantile}_{\lceil (N_{cal}+1)(1-\alpha)\rceil /N_{cal}}\left(\{s_i\}_{i=1}^{N_{cal}}\right).
+q_{1-\alpha}=\text{Quantile}_{\lceil (N_{cal}+1)(1-\alpha)\rceil /N_{cal}}\left(\{s_i\}_{i=1}^{N_{cal}}\right).
 \end{equation}
 The conformal prediction set for a new observation $x$ is then
 \begin{equation}
-	\Gamma_{\alpha}(x)=\{1\ \text{if}\ s(x)\le q_{1-\alpha};\ 0\ \text{if}\ 1-s(x)\le q_{1-\alpha}\}.
+\Gamma_{\alpha}(x)=\{1\ \text{if}\ s(x)\le q_{1-\alpha};\ 0\ \text{if}\ 1-s(x)\le q_{1-\alpha}\}.
 \end{equation}
 This mechanism turns the EWS into an uncertainty-aware decision layer: singleton sets trigger high-confidence actions, while ambiguous sets explicitly flag low-confidence cases for conservative control.
 
@@ -150,13 +149,13 @@ Following the strict deduplication protocol described in Section III.A, the data
 \begin{itemize}
 	\item \textbf{Route 14 (Mission St):} The primary training and temporal validation corridor, characterized by dense commercial zoning and high exogenous traffic noise.
 	\item \textbf{Route 38 (Geary Blvd):} An independent arterial corridor used for spatial cross-validation.
-	\item \textbf{Route 49 (Van Ness Ave):} A highly congested north-south corridor, also utilized for spatial cross-validation.
+	\item \textbf{Route 49 (Van Ness Ave):} A highly congested north-south corridor, also utilized for spatial transfer learning.
 \end{itemize}
 
 \subsection{Temporal Isolation and Spatial Cross-Validation}
 To prevent temporal data leakage (models observing future traffic patterns to predict past events), the dataset was strictly partitioned chronologically. For the baseline model and the primary predictive training on Route 14, data from February 1 to February 21 constituted the training set, while data from February 22 to February 28 served as the hold-out test set.
 
-For spatial cross-validation, the model trained \textit{exclusively} on Route 14 (up to Feb 21) was deployed to infer transitions on Routes 38 and 49 without any retraining or weight adjustment.
+For the spatial cross-validation (Transfer Learning evaluation), the model trained \textit{exclusively} on Route 14 (up to Feb 21) was deployed to infer transitions on Routes 38 and 49 without any retraining or weight adjustment.
 
 \subsection{Evaluation Metrics}
 Because the dataset is heavily skewed towards the nominal class, Accuracy is a deceptive metric. We evaluate the models using Precision, Recall (True Positive Rate), the harmonic mean F1-Score, and the Precision-Recall Area Under the Curve (PR-AUC) \cite{17}.
@@ -175,29 +174,6 @@ The sequential model achieved an F1-Score of 0.8234 ($\sigma=0.0109$, 95\% CI: $
 
 To further substantiate the statistical rigor of these metrics, a binomial bootstrap analysis ($B=10,000$ iterations) was conducted on the $n=390$ discrete collapse transitions observed during the temporal hold-out period. The resulting variance for both the F1-Score and Precision estimators converged to $\sigma^2 \approx 0.000120$. This narrow dispersion confirms that the sample size is sufficiently robust to yield statistically significant performance bounds, mitigating the risk of Type I and Type II inferential errors within the mixed-traffic operational domain.
 
-\subsection{Ablation Study of Sequential Window Depth}
-To isolate the effect of temporal depth in the sequential encoder, we evaluated five lag configurations while keeping the classifier family and optimization protocol fixed.
-
-\begin{table}[htbp]
-	\t\caption{Ablation Study: F1-Score by Sequential Window Depth}
-	\t\centering
-	\t\begin{tabular}{@{}lc@{}}
-		\t\t\toprule
-		\t\t\textbf{Window} & \textbf{F1-Score} \\ \midrule
-		\t\t$n-1$           & 0.416             \\
-		\t\t$n-2$           & 0.425             \\
-		\t\t$n-3$           & 0.428             \\
-		\t\t$n-4$           & 0.427             \\
-		\t\t$n-5$           & 0.427             \\ \bottomrule
-		\t\end{tabular}
-	\t\label{tab:ablation}
-\end{table}
-
-The sequence reaches its discrete mathematical peak at $n-3$ ($F1=0.428$): the first finite difference is positive up to $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) and non-positive afterwards ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), indicating that deeper lags do not add predictive signal and instead saturate performance.
-
-\subsection{Post-Filter Dataset Composition}
-Prior to model fitting, the longitudinal corpus contained 2,733,237 observations. Applying the strict transition-state filter ($B_{n-1}=0$) retained 1,979,230 actionable records. Within this filtered subset, 1,466,017 correspond to stable transitions ($0 \rightarrow 0$), whereas 513,213 correspond to critical deterioration events ($0 \rightarrow 1$).
-
 \subsection{Spatial Generalization (Spatial Cross-Validation)}
 A critical requirement for an algorithm within a regional Digital Twin is its ability to generalize across different topographies without demanding corridor-specific retraining. The model trained on Route 14 was tested directly on Routes 38 and 49.
 
@@ -206,13 +182,13 @@ A critical requirement for an algorithm within a regional Digital Twin is its ab
 	\centering
 	\begin{tabular}{@{}lccc@{}}
 		\toprule
-		\textbf{Metric}      & \textbf{Route 14}   & \textbf{Route 38}          & \textbf{Route 49}          \\
+		\textbf{Metric}      & \textbf{Route 14}   & \textbf{Route 38}  & \textbf{Route 49}  \\
 		                     & (Temporal Hold-out) & (Spatial Cross-Validation) & (Spatial Cross-Validation) \\ \midrule
-		Total Samples        & 11,811              & 46,007                     & 55,637                     \\
-		F1-Score ($\pm$ CI)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014         & 0.8576 $\pm$ 0.013         \\
-		Precision ($\pm$ CI) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008         & 0.9642 $\pm$ 0.007         \\
-		Recall               & 0.7241              & 0.7689                     & 0.7712                     \\
-		PR-AUC               & 0.765               & 0.792                      & 0.795                      \\ \bottomrule
+		Total Samples        & 11,811              & 46,007             & 55,637             \\
+		F1-Score ($\pm$ CI)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014 & 0.8576 $\pm$ 0.013 \\
+		Precision ($\pm$ CI) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008 & 0.9642 $\pm$ 0.007 \\
+		Recall               & 0.7241              & 0.7689             & 0.7712             \\
+		PR-AUC               & 0.765               & 0.792              & 0.795              \\ \bottomrule
 	\end{tabular}
 	\label{tab:performance}
 \end{table}
@@ -229,11 +205,9 @@ As detailed in Table \ref{tab:performance}, the model actually performed \textit
 \subsection{Longitudinal Stability Analysis}
 To verify that the proposed predictor is not overfitted to the specific traffic dynamics of February 2026, we extended the ingestion horizon to a three-month window (January--March 2026), obtaining 2.73 million longitudinal observations across Routes 14, 38, and 49. The objective of this analysis is twofold: (i) evaluate whether the signal geometry learned by the sequential $n-3$ model remains temporally stationary, and (ii) identify potential seasonal drifts that could compromise practical deployment in a continuously synchronized Digital Twin.
 
-Beyond visual inspection, the Augmented Dickey-Fuller (ADF) test over the monthly bunching-index series yielded $p=0.0077$ ($p<0.01$), formally rejecting a unit root and confirming strong stationarity rather than a merely flat-looking trajectory.
-
 Before inspecting monthly plots, we define the \textit{Seasonal Stability Degradation Proxy} (SSDP) for month $m$ relative to baseline month $m_0$ (January 2026) using the monthly median bunching index:
 \begin{equation}
-	\mathrm{SSDP}_{m}=\frac{\widetilde{B}_{m}-\widetilde{B}_{m_0}}{\widetilde{B}_{m_0}}\times 100\%,
+\mathrm{SSDP}_{m}=\frac{\widetilde{B}_{m}-\widetilde{B}_{m_0}}{\widetilde{B}_{m_0}}\times 100\%,
 \end{equation}
 where $\widetilde{B}_{m}$ is the median bunching index in month $m$. Positive values denote degradation (more bunching), while values near zero indicate longitudinal stability.
 

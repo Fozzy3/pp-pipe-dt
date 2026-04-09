@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.3.3)  9 APR 2026 10:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.3.3)  9 APR 2026 10:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -394,24 +394,24 @@ LaTeX Info: Redefining \% on input line 14.
 )
 \openout1 = `manuscript_es.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 
 -- Lines per column: 58 (exact).
-LaTeX Info: Redefining \. on input line 21.
-LaTeX Info: Redefining \% on input line 21.
+LaTeX Info: Redefining \. on input line 22.
+LaTeX Info: Redefining \% on input line 22.
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count319
@@ -440,18 +440,21 @@ File: translations-basic-dictionary-spanish.trsl (spanish translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `spanish'. on input line 21.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 26.
+or `spanish'. on input line 22.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 27.
 
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 26.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 27.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+
+
+Underfull \vbox (badness 1024) has occurred while \output is active []
 
 
 
@@ -460,8 +463,8 @@ dist/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 5
-8.
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 6
+0.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
@@ -470,7 +473,7 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 
 
 [2]
-Underfull \hbox (badness 3547) in paragraph at lines 101--101
+Underfull \hbox (badness 3547) in paragraph at lines 103--103
  []\OT1/ptm/m/it/10 . In-ge-nier[]^^Pa de Ca-rac-ter[]^^Psti-cas Espacio-Tempor
 ales
  []
@@ -478,12 +481,12 @@ ales
 
 
 
-Overfull \hbox (2.6575pt too wide) detected at line 113
+Overfull \hbox (2.6575pt too wide) detected at line 115
 []\OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = []
  []
 
 
-Overfull \hbox (14.63306pt too wide) detected at line 127
+Overfull \hbox (14.63306pt too wide) detected at line 129
 []\OMS/cmsy/m/n/10 L\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^R\OT1/cmr/m/n/10 ) = \O
 MS/cmsy/m/n/10 ^^@ [] \OML/cmm/m/it/10 w[] [] \OT1/cmr/m/n/10 + \OML/cmm/m/it/1
 0 ^^U\OMS/cmsy/m/n/10 jj\OML/cmm/m/it/10 ^^R\OMS/cmsy/m/n/10 jj[]
@@ -494,76 +497,80 @@ MS/cmsy/m/n/10 ^^@ [] \OML/cmm/m/it/10 w[] [] \OT1/cmr/m/n/10 + \OML/cmm/m/it/1
 [3]
 
 
-Overfull \hbox (11.71756pt too wide) in paragraph at lines 170--181
+
+[4]
+Overfull \hbox (98.86102pt too wide) in paragraph at lines 208--219
  [][] 
  []
 
-<../data/outputs/fig6_pr_curve.pdf, id=33, 387.22481pt x 337.56427pt>
+<../data/outputs/fig6_pr_curve.pdf, id=36, 387.22481pt x 337.56427pt>
 File: ../data/outputs/fig6_pr_curve.pdf Graphic file (type pdf)
 <use ../data/outputs/fig6_pr_curve.pdf>
 Package pdftex.def Info: ../data/outputs/fig6_pr_curve.pdf  used on input line 
-187.
+225.
 (pdftex.def)             Requested size: 226.79846pt x 197.7138pt.
 
 
-[4 <../data/outputs/fig6_pr_curve.pdf>]
-<../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf, id=87, 650
+
+
+[5 <../data/outputs/fig6_pr_curve.pdf>]
+<../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf, id=90, 650
 .43pt x 361.35pt>
 File: ../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf Graphi
 c file (type pdf)
 <use ../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf>
 Package pdftex.def Info: ../data/outputs/longitudinal/longitudinal_bunching_ind
-ex_SF:14.pdf  used on input line 201.
+ex_SF:14.pdf  used on input line 249.
 (pdftex.def)             Requested size: 246.95892pt x 137.19864pt.
-<../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf, id=88, 650.
+<../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf, id=91, 650.
 43pt x 361.35pt>
 File: ../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf Graphic
  file (type pdf)
 <use ../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf>
 Package pdftex.def Info: ../data/outputs/longitudinal/longitudinal_headway_drif
-t_SF:14.pdf  used on input line 208.
+t_SF:14.pdf  used on input line 256.
 (pdftex.def)             Requested size: 246.95892pt x 137.19864pt.
-<../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf, id=8
-9, 650.43pt x 361.35pt>
+<../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf, id=9
+2, 650.43pt x 361.35pt>
 File: ../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf 
 Graphic file (type pdf)
 <use ../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf>
 Package pdftex.def Info: ../data/outputs/longitudinal/longitudinal_seasonal_deg
-radation_SF:14.pdf  used on input line 215.
+radation_SF:14.pdf  used on input line 263.
 (pdftex.def)             Requested size: 246.95892pt x 137.19864pt.
 
 
 
 
-[5 <../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf> <../dat
+[6 <../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf> <../dat
 a/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf> <../data/outputs/l
 ongitudinal/longitudinal_seasonal_degradation_SF:14.pdf>]
 
 
-Underfull \hbox (badness 4699) in paragraph at lines 256--257
+Underfull \hbox (badness 4699) in paragraph at lines 304--305
 []\OT1/ptm/m/n/10 Para ga-ran-ti-zar trans-pa-ren-cia me-to-dol[]ogi-ca y apo-y
 ar
  []
 
 
-Underfull \hbox (badness 2662) in paragraph at lines 256--257
+Underfull \hbox (badness 2662) in paragraph at lines 304--305
 \OT1/ptm/m/n/10 in-ves-ti-ga-ci[]on fu-tu-ra, los scripts com-ple-tos de in-ges
 -ti[]on
  []
 
 
-Underfull \hbox (badness 1852) in paragraph at lines 256--257
+Underfull \hbox (badness 1852) in paragraph at lines 304--305
 \OT1/ptm/m/n/10 fi-gu-ra-ci[]on de hi-per-par[]ame-tros uti-li-za-das en es-te 
 es-tu-dio
  []
 
 
 
-[6]
+[7]
 
 
 
-[7
+[8
 
 ] (./manuscript_es.aux
 LaTeX Info: Redefining \. on input line 14.
@@ -575,10 +582,10 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 10119 strings out of 473197
- 222145 string characters out of 5718606
- 612708 words of memory out of 5000000
- 33256 multiletter control sequences out of 15000+600000
+ 10121 strings out of 473197
+ 222177 string characters out of 5718606
+ 615727 words of memory out of 5000000
+ 33258 multiletter control sequences out of 15000+600000
  603360 words of font info for 121 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,9n,80p,2006b,655s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -604,10 +611,10 @@ ourier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on manuscript_es.pdf (7 pages, 339350 bytes).
+Output written on manuscript_es.pdf (8 pages, 351898 bytes).
 PDF statistics:
- 331 PDF objects out of 1000 (max. 8388607)
- 111 compressed objects within 2 object streams
+ 334 PDF objects out of 1000 (max. 8388607)
+ 113 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

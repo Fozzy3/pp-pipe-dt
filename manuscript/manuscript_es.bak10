@@ -186,13 +186,13 @@ Para aislar el efecto de la profundidad temporal del codificador secuencial, eva
 	\t\caption{Estudio de Ablación: F1-Score por Profundidad de Ventana Secuencial}
 	\t\centering
 	\t\begin{tabular}{@{}lc@{}}
-		\t\t\toprule
-		\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
-		\t\t$n-1$            & 0.416             \\
-		\t\t$n-2$            & 0.425             \\
-		\t\t$n-3$            & 0.428             \\
-		\t\t$n-4$            & 0.427             \\
-		\t\t$n-5$            & 0.427             \\ \bottomrule
+			\t\t\toprule
+			\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
+			\t\t$n-1$            & 0.416             \\
+			\t\t$n-2$            & 0.425             \\
+			\t\t$n-3$            & 0.428             \\
+			\t\t$n-4$            & 0.427             \\
+			\t\t$n-5$            & 0.427             \\ \bottomrule
 		\t\end{tabular}
 	\t\label{tab:ablation}
 \end{table}

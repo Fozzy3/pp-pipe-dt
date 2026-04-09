@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1775749780.11852 "manuscript.tex" "manuscript.pdf" "manuscript" 1775749781.05414 0
+["pdflatex"] 1775750017.35268 "manuscript.tex" "manuscript.pdf" "manuscript" 1775750018.23291 0
   "../data/outputs/fig6_pr_curve.pdf" 1775743002.73885 18522 c92387469934d7dc5175c950f55b9755 ""
   "../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf" 1775746267.95351 13671 069d70fc897f8259ab8768eb04beb561 ""
   "../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf" 1775746268.12919 15983 59a57a9ed72ae89aac5805207be9ada7 ""
@@ -113,8 +113,8 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1772581453 5467255 9a64d1b40e0b893fc5588ecce9d8accf ""
-  "manuscript.aux" 1775749780.93138 7580 42e736c3d4b165bb27a778ceb41446df "pdflatex"
-  "manuscript.tex" 1775749752.40919 46539 07ff1aefe72676af9e12b1067a1bb5d2 ""
+  "manuscript.aux" 1775750018.12751 7580 ad444b6dd189c49dfdfca44dae2a5f25 "pdflatex"
+  "manuscript.tex" 1775750000.21996 46490 8f8c23a44512e0327c6c237f0b37c7b1 ""
   (generated)
   "manuscript.aux"
   "manuscript.log"

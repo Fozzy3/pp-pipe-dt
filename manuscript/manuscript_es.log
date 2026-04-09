@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.3.3)  9 APR 2026 09:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.3.3)  9 APR 2026 10:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -388,7 +388,10 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count318
 \l__pdf_internal_box=\box68
 )
-No file manuscript_es.aux.
+(./manuscript_es.aux
+LaTeX Info: Redefining \. on input line 14.
+LaTeX Info: Redefining \% on input line 14.
+)
 \openout1 = `manuscript_es.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
@@ -405,6 +408,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
+
 -- Lines per column: 58 (exact).
 LaTeX Info: Redefining \. on input line 21.
 LaTeX Info: Redefining \% on input line 21.
@@ -450,20 +454,120 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 
-Underfull \hbox (badness 7151) in paragraph at lines 41--41
+
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-
+dist/fonts/enc/dvips/base/8r.enc}
+
+
+]
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 5
+8.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+
+
+
+[2]
+Underfull \hbox (badness 3547) in paragraph at lines 101--101
  []\OT1/ptm/m/it/10 . In-ge-nier[]^^Pa de Ca-rac-ter[]^^Psti-cas Espacio-Tempor
 ales
  []
 
 
 
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-
-dist/fonts/enc/dvips/base/8r.enc}
 
+Overfull \hbox (2.6575pt too wide) detected at line 113
+[]\OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = []
+ []
+
+
+Overfull \hbox (14.63306pt too wide) detected at line 127
+[]\OMS/cmsy/m/n/10 L\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^R\OT1/cmr/m/n/10 ) = \O
+MS/cmsy/m/n/10 ^^@ [] \OML/cmm/m/it/10 w[] [] \OT1/cmr/m/n/10 + \OML/cmm/m/it/1
+0 ^^U\OMS/cmsy/m/n/10 jj\OML/cmm/m/it/10 ^^R\OMS/cmsy/m/n/10 jj[]
+ []
+
+
+
+[3]
+
+
+Overfull \hbox (11.71756pt too wide) in paragraph at lines 170--181
+ [][] 
+ []
+
+<../data/outputs/fig6_pr_curve.pdf, id=33, 387.22481pt x 337.56427pt>
+File: ../data/outputs/fig6_pr_curve.pdf Graphic file (type pdf)
+<use ../data/outputs/fig6_pr_curve.pdf>
+Package pdftex.def Info: ../data/outputs/fig6_pr_curve.pdf  used on input line 
+187.
+(pdftex.def)             Requested size: 226.79846pt x 197.7138pt.
+
+
+[4 <../data/outputs/fig6_pr_curve.pdf>]
+<../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf, id=87, 650
+.43pt x 361.35pt>
+File: ../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf Graphi
+c file (type pdf)
+<use ../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf>
+Package pdftex.def Info: ../data/outputs/longitudinal/longitudinal_bunching_ind
+ex_SF:14.pdf  used on input line 201.
+(pdftex.def)             Requested size: 246.95892pt x 137.19864pt.
+<../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf, id=88, 650.
+43pt x 361.35pt>
+File: ../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf Graphic
+ file (type pdf)
+<use ../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf>
+Package pdftex.def Info: ../data/outputs/longitudinal/longitudinal_headway_drif
+t_SF:14.pdf  used on input line 208.
+(pdftex.def)             Requested size: 246.95892pt x 137.19864pt.
+<../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf, id=8
+9, 650.43pt x 361.35pt>
+File: ../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf 
+Graphic file (type pdf)
+<use ../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf>
+Package pdftex.def Info: ../data/outputs/longitudinal/longitudinal_seasonal_deg
+radation_SF:14.pdf  used on input line 215.
+(pdftex.def)             Requested size: 246.95892pt x 137.19864pt.
+
+
+
+
+[5 <../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf> <../dat
+a/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf> <../data/outputs/l
+ongitudinal/longitudinal_seasonal_degradation_SF:14.pdf>]
+
+
+Underfull \hbox (badness 4699) in paragraph at lines 256--257
+[]\OT1/ptm/m/n/10 Para ga-ran-ti-zar trans-pa-ren-cia me-to-dol[]ogi-ca y apo-y
+ar
+ []
+
+
+Underfull \hbox (badness 2662) in paragraph at lines 256--257
+\OT1/ptm/m/n/10 in-ves-ti-ga-ci[]on fu-tu-ra, los scripts com-ple-tos de in-ges
+-ti[]on
+ []
+
+
+Underfull \hbox (badness 1852) in paragraph at lines 256--257
+\OT1/ptm/m/n/10 fi-gu-ra-ci[]on de hi-per-par[]ame-tros uti-li-za-das en es-te 
+es-tu-dio
+ []
+
+
+
+[6]
+
+
+
+[7
 
 ] (./manuscript_es.aux
-LaTeX Info: Redefining \. on input line 8.
-LaTeX Info: Redefining \% on input line 8.
+LaTeX Info: Redefining \. on input line 14.
+LaTeX Info: Redefining \% on input line 14.
 )
  ***********
 LaTeX2e <2024-11-01> patch level 2
@@ -471,32 +575,39 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 9971 strings out of 473197
- 218625 string characters out of 5718606
- 605494 words of memory out of 5000000
- 33123 multiletter control sequences out of 15000+600000
- 596228 words of font info for 108 fonts, out of 8000000 for 9000
+ 10119 strings out of 473197
+ 222145 string characters out of 5718606
+ 612708 words of memory out of 5000000
+ 33256 multiletter control sequences out of 15000+600000
+ 603360 words of font info for 121 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,6n,80p,1564b,655s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on manuscript_es.pdf (1 page, 160035 bytes).
+ 73i,9n,80p,2006b,655s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/c
+ourier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on manuscript_es.pdf (7 pages, 339350 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 331 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

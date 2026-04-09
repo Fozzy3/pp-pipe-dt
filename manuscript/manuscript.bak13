@@ -196,24 +196,24 @@ The longitudinal results indicate that the dominant collapse mechanism remains s
 To make this temporal robustness explicit, Fig.~\ref{fig:longitudinal_bi_14} shows the monthly evolution of the bunching index on Route 14, Fig.~\ref{fig:longitudinal_hd_14} reports the headway-drift trajectory, and Fig.~\ref{fig:longitudinal_sd_14} summarizes seasonal degradation behavior. Together, these diagnostics support production deployment of the EWS without month-specific re-calibration.
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf}
-	\caption{Longitudinal bunching-index trajectory for SF Muni Route 14 (January--March 2026), showing stable central tendency and bounded variance across months.}
-	\label{fig:longitudinal_bi_14}
+\centering
+\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf}
+\caption{Longitudinal bunching-index trajectory for SF Muni Route 14 (January--March 2026), showing stable central tendency and bounded variance across months.}
+\label{fig:longitudinal_bi_14}
 \end{figure}
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf}
-	\caption{Longitudinal headway-drift profile for Route 14. Persistent negative excursions remain the dominant precursor of collapse transitions over time.}
-	\label{fig:longitudinal_hd_14}
+\centering
+\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf}
+\caption{Longitudinal headway-drift profile for Route 14. Persistent negative excursions remain the dominant precursor of collapse transitions over time.}
+\label{fig:longitudinal_hd_14}
 \end{figure}
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf}
-	\caption{Seasonal degradation diagnostic for Route 14, confirming no critical temporal instability that would invalidate continuous deployment of the sequential EWS framework.}
-	\label{fig:longitudinal_sd_14}
+\centering
+\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf}
+\caption{Seasonal degradation diagnostic for Route 14, confirming no critical temporal instability that would invalidate continuous deployment of the sequential EWS framework.}
+\label{fig:longitudinal_sd_14}
 \end{figure}
 
 \subsection{Feature Importance and the Physics of Collapse}

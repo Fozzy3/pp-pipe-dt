@@ -1,9 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1775746705.0725 "/home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript.tex" "manuscript.pdf" "manuscript" 1775746705.88012 0
+["pdflatex"] 1775747038.9772 "/home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript.tex" "manuscript.pdf" "manuscript" 1775747039.88542 0
   "../data/outputs/fig6_pr_curve.pdf" 1775743002.73885 18522 c92387469934d7dc5175c950f55b9755 ""
+  "../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf" 1775746267.95351 13671 069d70fc897f8259ab8768eb04beb561 ""
+  "../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf" 1775746268.12919 15983 59a57a9ed72ae89aac5805207be9ada7 ""
+  "../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf" 1775746268.31439 15717 475d236fe058fc988b85d3ff720d3b90 ""
   "/etc/texmf/web2c/texmf.cnf" 1772580790.88339 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/juferoga/.texlive2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1772581820 3347565 e5312e437fc58f1217e31f011eb482cc ""
-  "/home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript.tex" 1775746704.3981 38096 c867170582ec07517136f993d0b68fc8 ""
+  "/home/juferoga/repos/ud/maestria/papers/pp-pipe-dt/manuscript/manuscript.tex" 1775747038.34399 39875 aeb08c7f2a4cd5471ea829939033d589 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -111,8 +114,8 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1772581453 5467255 9a64d1b40e0b893fc5588ecce9d8accf ""
-  "manuscript.aux" 1775746705.80659 5516 2b54cc0ded3f17eaefd2099d7a1aec47 "pdflatex"
-  "manuscript.tex" 1775746704.3981 38096 c867170582ec07517136f993d0b68fc8 ""
+  "manuscript.aux" 1775747039.80471 6453 a63500d7ef41ad8df3c5836fd925ad93 "pdflatex"
+  "manuscript.tex" 1775747038.34399 39875 aeb08c7f2a4cd5471ea829939033d589 ""
   (generated)
   "manuscript.aux"
   "manuscript.log"

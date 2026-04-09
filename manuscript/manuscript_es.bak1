@@ -23,11 +23,11 @@
 \maketitle
 
 \begin{abstract}
-	El agrupamiento de buses (bus bunching) es una anomalía operativa estocástica que afecta severamente la confiabilidad de los corredores de transporte público de alta frecuencia. Aunque la integración de datos General Transit Feed Specification Realtime (GTFS-RT) en arquitecturas de Gemelos Digitales (DT) ha ganado tracción, los modelos predictivos existentes suelen presentar altas tasas de falsos positivos debido al ruido de señal urbano o no proporcionan tiempo de anticipación suficiente para la intervención operativa. Este artículo propone un marco algorítmico empírico de Señales de Alerta Temprana (EWS) centrado en la eficiencia computacional y la validación secuencial. Utilizando un conjunto de datos de aproximadamente 1 millón de registros crudos de Localización Automática de Vehículos (AVL) de San Francisco Muni (febrero de 2026)---estrictamente depurado hasta 205,584 observaciones válidas para eliminar fuga de datos espacial---demostramos que una ventana secuencial multi-parada ($n-3$) filtra eficazmente el ruido transitorio. Nuestros resultados muestran que un modelo balanceado de Regresión Logística, optimizado mediante maximización del F1-score y regularización L2, alcanza una precisión de 0.95 (IC 95\%: [0.93, 0.97]) y un F1-score corregido de 0.8234 (IC 95\%: [0.80, 0.84]) para transiciones de estado (nominal a agrupamiento). Identificamos la tasa de colapso del intervalo ($\Delta H_{n-1}$) como la señal precursora principal ($w \approx -0.036$). Además, reportamos una latencia de inferencia de \SI{0.00042}{\ms} por registro utilizando una base analítica embebida en proceso (DuckDB), habilitando monitoreo en tiempo real a escala regional. Este estudio aporta fundamentos matemáticos y referentes de desempeño para una gestión proactiva del tránsito en entornos de tráfico mixto, y establece la base para estrategias de control en sistemas BRT.
+\ 	El agrupamiento de buses (bus bunching) es una anomalía operativa estocástica que afecta severamente la confiabilidad de los corredores de transporte público de alta frecuencia. Aunque la integración de datos General Transit Feed Specification Realtime (GTFS-RT) en arquitecturas de Gemelos Digitales (DT) ha ganado tracción, los modelos predictivos existentes suelen presentar altas tasas de falsos positivos debido al ruido de señal urbano o no proporcionan tiempo de anticipación suficiente para la intervención operativa. Este artículo propone un marco algorítmico empírico de Señales de Alerta Temprana (EWS) centrado en la eficiencia computacional y la validación secuencial. Utilizando un conjunto de datos de aproximadamente 1 millón de registros crudos de Localización Automática de Vehículos (AVL) de San Francisco Muni (febrero de 2026)---estrictamente depurado hasta 205,584 observaciones válidas para eliminar fuga de datos espacial---demostramos que una ventana secuencial multi-parada ($n-3$) filtra eficazmente el ruido transitorio. Nuestros resultados muestran que un modelo balanceado de Regresión Logística, optimizado mediante maximización del F1-score y regularización L2, alcanza una precisión de 0.95 (IC 95\%: [0.93, 0.97]) y un F1-score corregido de 0.8234 (IC 95\%: [0.80, 0.84]) para transiciones de estado (nominal a agrupamiento). Identificamos la tasa de colapso del intervalo ($\Delta H_{n-1}$) como la señal precursora principal ($w \approx -0.036$). Además, reportamos una latencia de inferencia de \SI{0.00042}{\ms} por registro utilizando una base analítica embebida en proceso (DuckDB), habilitando monitoreo en tiempo real a escala regional. Este estudio aporta fundamentos matemáticos y referentes de desempeño para una gestión proactiva del tránsito en entornos de tráfico mixto, y establece la base para estrategias de control en sistemas BRT.
 \end{abstract}
 
 \begin{IEEEkeywords}
-	Agrupamiento de buses, Gemelos Digitales, Señales de alerta temprana, GTFS Realtime, Aprendizaje automático, Tránsito público, Análisis espacio-temporal, Computación en el borde.
+\ 	Agrupamiento de buses, Gemelos Digitales, Señales de alerta temprana, GTFS Realtime, Aprendizaje automático, Tránsito público, Análisis espacio-temporal, Computación en el borde.
 \end{IEEEkeywords}
 
 \section{Introducción}
@@ -39,10 +39,10 @@ Este artículo aborda dichos vacíos presentando una propuesta empírica y algor
 
 Nuestra contribución se estructura así:
 \begin{itemize}
-	\item Proponemos un marco de ventanas multi-parada ($n-3$) que actúa como filtro pasa-bajas frente al ruido urbano exógeno, reduciendo drásticamente la fatiga por alarmas en centros de control de tránsito.
-	\item Formulamos un clasificador optimizado con regularización L2 para predicción de transiciones de estado, que elimina por completo el sesgo de persistencia (fuga de etiqueta), garantizando que la EWS detecte transiciones sistémicas genuinas desde un estado nominal hacia un estado agrupado.
-	\item Presentamos un benchmark computacional riguroso del pipeline de ingestión e inferencia utilizando una arquitectura analítica embebida (DuckDB), demostrando viabilidad para despliegues DT Edge-Cloud con latencias sub-milisegundo.
-	\item Adoptamos ciencia abierta al disponibilizar de forma abierta todo el pipeline de datos y código de modelado para reproducibilidad completa.
+\ 	\item Proponemos un marco de ventanas multi-parada ($n-3$) que actúa como filtro pasa-bajas frente al ruido urbano exógeno, reduciendo drásticamente la fatiga por alarmas en centros de control de tránsito.
+\ 	\item Formulamos un clasificador optimizado con regularización L2 para predicción de transiciones de estado, que elimina por completo el sesgo de persistencia (fuga de etiqueta), garantizando que la EWS detecte transiciones sistémicas genuinas desde un estado nominal hacia un estado agrupado.
+\ 	\item Presentamos un benchmark computacional riguroso del pipeline de ingestión e inferencia utilizando una arquitectura analítica embebida (DuckDB), demostrando viabilidad para despliegues DT Edge-Cloud con latencias sub-milisegundo.
+\ 	\item Adoptamos ciencia abierta al disponibilizar de forma abierta todo el pipeline de datos y código de modelado para reproducibilidad completa.
 \end{itemize}
 
 El resto del artículo se organiza como sigue: la Sección II revisa el estado del arte. La Sección III detalla la arquitectura del sistema y la formulación matemática. La Sección IV describe la configuración experimental. La Sección V presenta los resultados, incluyendo validación cruzada espacial e importancia de características. La Sección VI discute implicaciones operativas e integración futura con estrategias de control BRT, seguida de conclusiones en la Sección VII.
@@ -77,53 +77,53 @@ De forma crítica, tras ingerir el feed GTFS-RT (VehiclePositions y TripUpdates)
 \subsection{Formulación Matemática de los Estados del Sistema}
 Sea $T_{obs}(i, v_k)$ y $T_{sch}(i, v_k)$ el tiempo observado y programado de llegada para el vehículo $v_k$ en la parada $i$, respectivamente. El drift de retraso $D$ para un vehículo dado es la desviación respecto al horario:
 \begin{equation}
-	D(i, v_k) = T_{obs}(i, v_k) - T_{sch}(i, v_k)
+\ 	D(i, v_k) = T_{obs}(i, v_k) - T_{sch}(i, v_k)
 \end{equation}
 
 Mientras $D$ mide adherencia al horario, la estabilidad del sistema está gobernada por el headway $H$. Definimos el headway observado $h_{obs}$ entre el vehículo $v_2$ y su predecesor $v_1$ en la misma ruta como:
 \begin{equation}
-	h_{obs}(i) = T_{obs}(i, v_2) - T_{obs}(i, v_1)
+\ 	h_{obs}(i) = T_{obs}(i, v_2) - T_{obs}(i, v_1)
 \end{equation}
 Análogamente, el headway programado es:
 \begin{equation}
-	h_{sch}(i) = T_{sch}(i, v_2) - T_{sch}(i, v_1)
+\ 	h_{sch}(i) = T_{sch}(i, v_2) - T_{sch}(i, v_1)
 \end{equation}
 
 Un evento de agrupamiento ($B$) se define como estado binario. Siguiendo estándares de la industria \cite{1,10}, se declara colapso cuando el headway observado es menor al 25\% del headway programado:
 \begin{equation}
-	B_i =
-	\begin{cases}
-		1, & \text{si } h_{obs}(i) < 0.25 \cdot h_{sch}(i) \\
-		0, & \text{en otro caso}
-	\end{cases}
+\ 	B_i =
+\ 	\begin{cases}
+\ 	\t1, & \text{si } h_{obs}(i) < 0.25 \cdot h_{sch}(i) \\
+\ 	\t0, & \text{en otro caso}
+\ 	\end{cases}
 \end{equation}
 
 \subsection{Ingeniería de Características Espacio-Temporales (Ventana $n-3$)}
 Para predecir el estado $B_n$ en la próxima parada $n$, extraemos la trayectoria histórica del vehículo en las paradas previas ($n-1, n-2, n-3$). El vector de características $X \in \mathbb{R}^{12}$ captura tanto estado absoluto como tasa dinámica de cambio (derivadas discretas de primer orden):
 \begin{equation}
-	\Delta D_j = D(n-j) - D(n-j-1) \quad \text{para } j \in \{1, 2, 3\}
+\ 	\Delta D_j = D(n-j) - D(n-j-1) \quad \text{para } j \in \{1, 2, 3\}
 \end{equation}
 \begin{equation}
-	\Delta H_j = h_{obs}(n-j) - h_{obs}(n-j-1) \quad \text{para } j \in \{1, 2, 3\}
+\ 	\Delta H_j = h_{obs}(n-j) - h_{obs}(n-j-1) \quad \text{para } j \in \{1, 2, 3\}
 \end{equation}
 
 El vector completo de inferencia es:
 \begin{equation}
-	X_n = \left[ D_{n-1}, D_{n-2}, D_{n-3}, h_{n-1}, h_{n-2}, h_{n-3}, \Delta D_{1:3}, \Delta H_{1:3} \right]
+\ 	X_n = \left[ D_{n-1}, D_{n-2}, D_{n-3}, h_{n-1}, h_{n-2}, h_{n-3}, \Delta D_{1:3}, \Delta H_{1:3} \right]
 \end{equation}
 
 \subsection{Filtro de Estado de Transición y Eliminación del Sesgo de Persistencia}
 Una falla metodológica fundamental en parte de la literatura predictiva de tránsito es no considerar la inercia física (sesgo de persistencia). Si un vehículo ya está agrupado en la parada $n-1$, predecir que continuará agrupado en $n$ es extrapolación trivial de la cinemática, no una señal de alerta temprana.
 
-Para garantizar utilidad operativa, nuestro modelo EWS se formula estrictamente como predictor de transición de estado. Filtramos entrenamiento y evaluación para que el modelo observe sólo instancias donde el vehículo estaba nominal en la parada previa ($B_{n-1}=0$). La probabilidad de transición a agrupamiento en la parada $n$ se modela con Regresión Logística:
+Para garantizar utilidad operativa, nuestro modelo EWS se formula estrictamente como predictor de transición de estado. Filtramos entrenamiento y evaluación para que el modelo observe solo instancias donde el vehículo estaba nominal en la parada previa ($B_{n-1}=0$). La probabilidad de transición a agrupamiento en la parada $n$ se modela con Regresión Logística:
 \begin{equation}
-	P(B_n=1 \mid B_{n-1}=0, X_n) = \frac{1}{1 + e^{-(\theta^T X_n + \theta_0)}}
+\ 	P(B_n=1 \mid B_{n-1}=0, X_n) = \frac{1}{1 + e^{-(\theta^T X_n + \theta_0)}}
 \end{equation}
 
 \subsection{Optimización y Regularización}
 Dado el desbalance severo de clases (la transición $0 \rightarrow 1$ ocurre en menos del 8\% de observaciones nominales), optimizar con cross-entropy estándar suele producir un clasificador trivial mayoritario (predice todos 0). Aplicamos pesos de clase inversamente proporcionales a frecuencia en la función de Log-Loss, junto con regularización L2 para evitar sobreajuste a cuellos de botella de corredores específicos:
 \begin{equation}
-	\mathcal{L}(\theta) = - \sum_{m=1}^{M} w_m \left[ y_m \log(\hat{y}_m) + (1-y_m)\log(1-\hat{y}_m) \right] + \lambda ||\theta||_2^2
+\ 	\mathcal{L}(\theta) = - \sum_{m=1}^{M} w_m \left[ y_m \log(\hat{y}_m) + (1-y_m)\log(1-\hat{y}_m) \right] + \lambda ||\theta||_2^2
 \end{equation}
 donde $w_m$ es el peso de clase de la muestra $m$, $y_m \in \{0,1\}$ el estado real de transición, $\hat{y}_m$ la probabilidad predicha y $\lambda$ el hiperparámetro de penalización L2 determinado por grid search. El umbral de decisión $\tau$ no se fija en 0.5; se selecciona dinámicamente para maximizar F1-Score en validación.
 
@@ -134,9 +134,9 @@ La validación empírica del marco propuesto se sustenta en un conjunto de datos
 
 Tras aplicar el protocolo estricto de deduplicación de la Sección III.A, el conjunto se redujo a 205,584 observaciones válidas y únicas a nivel parada. Seleccionamos tres corredores principales que representan entornos urbanos de tráfico mixto y alta frecuencia:
 \begin{itemize}
-	\item \textbf{Ruta 14 (Mission St):} corredor primario para entrenamiento y validación temporal, caracterizado por zonificación comercial densa y alto ruido de tráfico exógeno.
-	\item \textbf{Ruta 38 (Geary Blvd):} corredor arterial independiente utilizado para validación cruzada espacial.
-	\item \textbf{Ruta 49 (Van Ness Ave):} corredor norte-sur altamente congestionado, también usado para transferencia espacial.
+\ 	\item \textbf{Ruta 14 (Mission St):} corredor primario para entrenamiento y validación temporal, caracterizado por zonificación comercial densa y alto ruido de tráfico exógeno.
+\ 	\item \textbf{Ruta 38 (Geary Blvd):} corredor arterial independiente utilizado para validación cruzada espacial.
+\ 	\item \textbf{Ruta 49 (Van Ness Ave):} corredor norte-sur altamente congestionado, también usado para transferencia espacial.
 \end{itemize}
 
 \subsection{Aislamiento Temporal y Validación Cruzada Espacial}
@@ -165,28 +165,28 @@ Para reforzar el rigor estadístico, se realizó bootstrap binomial ($B=10,000$ 
 Un requisito crítico para un algoritmo dentro de un DT regional es generalizar entre topografías distintas sin reentrenamiento específico por corredor. El modelo entrenado en Ruta 14 se probó directamente sobre Rutas 38 y 49.
 
 \begin{table}[htbp]
-	\caption{Métricas de desempeño del modelo en dominios espaciales}
-	\centering
-	\begin{tabular}{@{}lccc@{}}
-		\toprule
-		\textbf{Métrica}     & \textbf{Ruta 14}    & \textbf{Ruta 38}   & \textbf{Ruta 49}   \\
-		                     & (Hold-out temporal) & (Transferencia)    & (Transferencia)    \\ \midrule
-		Total de muestras    & 11,811              & 46,007             & 55,637             \\
-		F1-Score ($\pm$ IC)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014 & 0.8576 $\pm$ 0.013 \\
-		Precisión ($\pm$ IC) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008 & 0.9642 $\pm$ 0.007 \\
-		Recall               & 0.7241              & 0.7689             & 0.7712             \\
-		PR-AUC               & 0.765               & 0.792              & 0.795              \\ \bottomrule
-	\end{tabular}
-	\label{tab:performance}
+\ 	\caption{Métricas de desempeño del modelo en dominios espaciales}
+\ 	\centering
+\ 	\begin{tabular}{@{}lccc@{}}
+\ 	\t\toprule
+\ 	\t\textbf{Métrica}     & \textbf{Ruta 14}   & \textbf{Ruta 38}  & \textbf{Ruta 49}  \\
+\ 	\t                    & (Hold-out temporal) & (Transferencia)    & (Transferencia)    \\ \midrule
+\ 	\tTotal de muestras   & 11,811              & 46,007             & 55,637             \\
+\ 	\tF1-Score ($\pm$ IC) & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014 & 0.8576 $\pm$ 0.013 \\
+\ 	\tPrecisión ($\pm$ IC)& 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008 & 0.9642 $\pm$ 0.007 \\
+\ 	\tRecall              & 0.7241              & 0.7689             & 0.7712             \\
+\ 	\tPR-AUC              & 0.765               & 0.792              & 0.795              \\ \bottomrule
+\ 	\end{tabular}
+\ 	\label{tab:performance}
 \end{table}
 
 Como muestra la Tabla \ref{tab:performance}, el modelo incluso rindió \textit{mejor} en corredores de transferencia, logrando F1 de 0.8549 y 0.8576. Este resultado empírico sugiere fuertemente que la ventana secuencial captura leyes físicas subyacentes del deterioro del headway y no simplemente memoriza cuellos de botella geográficos de Mission Street.
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.9\linewidth]{../data/outputs/fig6_pr_curve.pdf}
-	\caption{Curvas Precisión-Recall (PR) que muestran el compromiso superior entre sensibilidad y especificidad alcanzado por el modelo secuencial $n-3$ en múltiples dominios espaciales independientes.}
-	\label{fig:pr_curve}
+\ 	\centering
+\ 	\includegraphics[width=0.9\linewidth]{../data/outputs/fig6_pr_curve.pdf}
+\ 	\caption{Curvas Precisión-Recall (PR) que muestran el compromiso superior entre sensibilidad y especificidad alcanzado por el modelo secuencial $n-3$ en múltiples dominios espaciales independientes.}
+\ 	\label{fig:pr_curve}
 \end{figure}
 
 \subsection{Análisis de Estabilidad Longitudinal}
@@ -197,24 +197,24 @@ Los resultados longitudinales indican estabilidad del mecanismo dominante de col
 Para explicitar dicha robustez temporal, la Fig.~\ref{fig:longitudinal_bi_14} muestra la evolución mensual del índice de agrupamiento en Ruta 14; la Fig.~\ref{fig:longitudinal_hd_14} reporta la trayectoria de drift de headway; y la Fig.~\ref{fig:longitudinal_sd_14} resume el comportamiento de degradación estacional. En conjunto, estos diagnósticos respaldan el despliegue productivo de la EWS sin necesidad de recalibración específica por mes.
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf}
-	\caption{Trayectoria longitudinal del índice de agrupamiento para SF Muni Ruta 14 (enero--marzo de 2026), mostrando tendencia central estable y varianza acotada entre meses.}
-	\label{fig:longitudinal_bi_14}
+\centering
+\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_bunching_index_SF:14.pdf}
+\caption{Trayectoria longitudinal del índice de agrupamiento para SF Muni Ruta 14 (enero--marzo de 2026), mostrando tendencia central estable y varianza acotada entre meses.}
+\label{fig:longitudinal_bi_14}
 \end{figure}
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf}
-	\caption{Perfil longitudinal de drift de headway para Ruta 14. Las excursiones negativas persistentes se mantienen como precursor dominante de transiciones de colapso en el tiempo.}
-	\label{fig:longitudinal_hd_14}
+\centering
+\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_headway_drift_SF:14.pdf}
+\caption{Perfil longitudinal de drift de headway para Ruta 14. Las excursiones negativas persistentes se mantienen como precursor dominante de transiciones de colapso en el tiempo.}
+\label{fig:longitudinal_hd_14}
 \end{figure}
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf}
-	\caption{Diagnóstico de degradación estacional para Ruta 14, confirmando ausencia de inestabilidad temporal crítica que invalide el despliegue continuo del marco secuencial EWS.}
-	\label{fig:longitudinal_sd_14}
+\centering
+\includegraphics[width=0.98\linewidth]{../data/outputs/longitudinal/longitudinal_seasonal_degradation_SF:14.pdf}
+\caption{Diagnóstico de degradación estacional para Ruta 14, confirmando ausencia de inestabilidad temporal crítica que invalide el despliegue continuo del marco secuencial EWS.}
+\label{fig:longitudinal_sd_14}
 \end{figure}
 
 \subsection{Importancia de Características y Física del Colapso}
@@ -257,65 +257,65 @@ Para garantizar transparencia metodológica y apoyar investigación futura, los 
 
 \begin{thebibliography}{30}
 
-	\bibitem{1} C. F. Daganzo, ``A headway-based approach to eliminate bus bunching: Systematic analysis and comparisons,'' \textit{Transportation Research Part B: Methodological}, vol. 43, no. 10, pp. 913--921, 2009. \url{https://doi.org/10.1016/j.trb.2009.04.002}
+\ 	\bibitem{1} C. F. Daganzo, ``A headway-based approach to eliminate bus bunching: Systematic analysis and comparisons,'' \textit{Transportation Research Part B: Methodological}, vol. 43, no. 10, pp. 913--921, 2009. \url{https://doi.org/10.1016/j.trb.2009.04.002}
 
-	\bibitem{2} J. J. Bartholdi and D. D. Eisenstein, ``A self-coordinating bus route to resist bus bunching,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, vol. 13, no. 2, pp. 489--498, 2012. \url{https://doi.org/10.1109/TITS.2011.2174232}
+\ 	\bibitem{2} J. J. Bartholdi and D. D. Eisenstein, ``A self-coordinating bus route to resist bus bunching,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, vol. 13, no. 2, pp. 489--498, 2012. \url{https://doi.org/10.1109/TITS.2011.2174232}
 
-	\bibitem{3} P. Wang et al., ``Modeling and Prediction of Bus Operation States for Bunching Analysis,'' \textit{IEEE Access}, vol. 8, pp. 10256--10268, 2020. \url{https://doi.org/10.1109/ACCESS.2020.2991708}
+\ 	\bibitem{3} P. Wang et al., ``Modeling and Prediction of Bus Operation States for Bunching Analysis,'' \textit{IEEE Access}, vol. 8, pp. 10256--10268, 2020. \url{https://doi.org/10.1109/ACCESS.2020.2991708}
 
-	\bibitem{4} H. Jo, ``Navigating the bus bunching problem in urban environments with GTFS-Realtime data,'' \textit{Transportation Research Part C: Emerging Technologies}, vol. 145, 2023.
+\ 	\bibitem{4} H. Jo, ``Navigating the bus bunching problem in urban environments with GTFS-Realtime data,'' \textit{Transportation Research Part C: Emerging Technologies}, vol. 145, 2023.
 
-	\bibitem{5} C. Botín-Sanabria et al., ``Digital-twin–driven urban lifecycle paradigm: evidence from the Singapore–Nanjing eco Hi-Tech Island,'' \textit{Frontiers in Sustainable Cities}, 2026. \url{https://doi.org/10.3389/frsc.2026.1733281}
+\ 	\bibitem{5} C. Botín-Sanabria et al., ``Digital-twin–driven urban lifecycle paradigm: evidence from the Singapore–Nanjing eco Hi-Tech Island,'' \textit{Frontiers in Sustainable Cities}, 2026. \url{https://doi.org/10.3389/frsc.2026.1733281}
 
-	\bibitem{6} P. Manandhar et al., ``Leveraging Digital Twin Technology for Sustainable and Efficient Public Transportation,'' \textit{Applied Sciences}, vol. 15, no. 6, 2942, 2025. \url{https://www.mdpi.com/2076-3417/15/6/2942}
+\ 	\bibitem{6} P. Manandhar et al., ``Leveraging Digital Twin Technology for Sustainable and Efficient Public Transportation,'' \textit{Applied Sciences}, vol. 15, no. 6, 2942, 2025. \url{https://www.mdpi.com/2076-3417/15/6/2942}
 
-	\bibitem{7} L. Hu et al., ``From Raw GPS to GTFS: A Real-World Open Dataset for Bus Travel Time Prediction,'' \textit{Data}, vol. 10, no. 8, 119, 2025. \url{https://doi.org/10.3390/data10080119}
+\ 	\bibitem{7} L. Hu et al., ``From Raw GPS to GTFS: A Real-World Open Dataset for Bus Travel Time Prediction,'' \textit{Data}, vol. 10, no. 8, 119, 2025. \url{https://doi.org/10.3390/data10080119}
 
-	\bibitem{8} S. V. Kumar and L. Vanajakshi, ``Evaluation of early warning metrics for headway degradation in BRT corridors,'' \textit{Transportation Letters}, vol. 16, no. 8, pp. 889--899, 2024.
+\ 	\bibitem{8} S. V. Kumar and L. Vanajakshi, ``Evaluation of early warning metrics for headway degradation in BRT corridors,'' \textit{Transportation Letters}, vol. 16, no. 8, pp. 889--899, 2024.
 
-	\bibitem{9} J. Zhao, A. Bhowmick, and V. Corcoran, ``Measuring transit performance using AVL and GTFS data,'' \textit{Public Transport}, vol. 12, no. 1, pp. 1--25, 2020.
+\ 	\bibitem{9} J. Zhao, A. Bhowmick, and V. Corcoran, ``Measuring transit performance using AVL and GTFS data,'' \textit{Public Transport}, vol. 12, no. 1, pp. 1--25, 2020.
 
-	\bibitem{10} C. M. Olvera-Toscano et al., ``Holding times to maintain quasi-regular headways and reduce real-time bus bunching,'' \textit{Public Transport}, 2023. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC10188328/}
+\ 	\bibitem{10} C. M. Olvera-Toscano et al., ``Holding times to maintain quasi-regular headways and reduce real-time bus bunching,'' \textit{Public Transport}, 2023. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC10188328/}
 
-	\bibitem{11} A. Aemmer et al., ``Measurement and classification of transit delays using GTFS-RT data,'' \textit{Journal of Public Transportation}, vol. 24, 2022. \url{https://doi.org/10.1007/s12469-022-00291-7}
+\ 	\bibitem{11} A. Aemmer et al., ``Measurement and classification of transit delays using GTFS-RT data,'' \textit{Journal of Public Transportation}, vol. 24, 2022. \url{https://doi.org/10.1007/s12469-022-00291-7}
 
-	\bibitem{12} L. Ge, M. Sarhani, S. Voß, and L. Xie, ``Review of transit data sources: Potentials, challenges and complementarity,'' \textit{Sustainability}, vol. 13, no. 20, 11450, 2021.
+\ 	\bibitem{12} L. Ge, M. Sarhani, S. Voß, and L. Xie, ``Review of transit data sources: Potentials, challenges and complementarity,'' \textit{Sustainability}, vol. 13, no. 20, 11450, 2021.
 
-	\bibitem{13} A. Graser, ``Analyzing GTFS Realtime data for public transport insights using column-oriented databases,'' \textit{Data Engineering Letters}, vol. 14, pp. 45--56, 2024.
+\ 	\bibitem{13} A. Graser, ``Analyzing GTFS Realtime data for public transport insights using column-oriented databases,'' \textit{Data Engineering Letters}, vol. 14, pp. 45--56, 2024.
 
-	\bibitem{14} M. Raasveldt and H. Mühleisen, ``DuckDB: an Embeddable Analytical Database,'' in \textit{Proceedings of the 2019 International Conference on Management of Data (SIGMOD)}, 2019, pp. 1981--1984. \url{https://doi.org/10.1145/3299869.3320212}
+\ 	\bibitem{14} M. Raasveldt and H. Mühleisen, ``DuckDB: an Embeddable Analytical Database,'' in \textit{Proceedings of the 2019 International Conference on Management of Data (SIGMOD)}, 2019, pp. 1981--1984. \url{https://doi.org/10.1145/3299869.3320212}
 
-	\bibitem{15} E. Boudabbous et al., ``Scalable Transit Delay Prediction at City Scale: A Systematic Approach with Multi-Resolution Feature Engineering and Deep Learning,'' \textit{arXiv preprint arXiv:2601.18521}, Jan. 2026. \url{https://arxiv.org/abs/2601.18521}
+\ 	\bibitem{15} E. Boudabbous et al., ``Scalable Transit Delay Prediction at City Scale: A Systematic Approach with Multi-Resolution Feature Engineering and Deep Learning,'' \textit{arXiv preprint arXiv:2601.18521}, Jan. 2026. \url{https://arxiv.org/abs/2601.18521}
 
-	\bibitem{16} E. Al-Fares et al., ``Handling class imbalance in stochastic transportation anomaly prediction,'' \textit{Expert Systems with Applications}, vol. 238, 121742, 2024.
+\ 	\bibitem{16} E. Al-Fares et al., ``Handling class imbalance in stochastic transportation anomaly prediction,'' \textit{Expert Systems with Applications}, vol. 238, 121742, 2024.
 
-	\bibitem{17} H. Chen and Y. Cheng, ``Travel Mode Choice Prediction Using Imbalanced Machine Learning,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, 2023. \url{https://doi.org/10.1109/TITS.2023.3237681}
+\ 	\bibitem{17} H. Chen and Y. Cheng, ``Travel Mode Choice Prediction Using Imbalanced Machine Learning,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, 2023. \url{https://doi.org/10.1109/TITS.2023.3237681}
 
-	\bibitem{18} L. Li, D. Wen, and N. N. Zheng, ``Imbalanced data learning for rare transit anomaly detection,'' \textit{Pattern Recognition}, vol. 122, 2022.
+\ 	\bibitem{18} L. Li, D. Wen, and N. N. Zheng, ``Imbalanced data learning for rare transit anomaly detection,'' \textit{Pattern Recognition}, vol. 122, 2022.
 
-	\bibitem{19} S. Jeong et al., ``BAT-transformer: Prediction of bus arrival time with transformer encoder,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, vol. 24, no. 1, pp. 882--893, 2023.
+\ 	\bibitem{19} S. Jeong et al., ``BAT-transformer: Prediction of bus arrival time with transformer encoder,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, vol. 24, no. 1, pp. 882--893, 2023.
 
-	\bibitem{20} T. Yin, Y. Li, and J. Zhao, ``Deep learning vs. logistic regression for transit reliability prediction: A comparative study,'' \textit{Transportation Research Part C}, vol. 114, pp. 241--255, 2020.
+\ 	\bibitem{20} T. Yin, Y. Li, and J. Zhao, ``Deep learning vs. logistic regression for transit reliability prediction: A comparative study,'' \textit{Transportation Research Part C}, vol. 114, pp. 241--255, 2020.
 
-	\bibitem{21} Y. Yang, J. Cheng, and Y. Liu, ``An overview of solutions to the bus bunching problem in urban bus systems,'' \textit{Frontiers of Engineering Management}, vol. 11, no. 4, p. 661, 2024. \url{https://doi.org/10.1007/s42524-024-0297-1}
+\ 	\bibitem{21} Y. Yang, J. Cheng, and Y. Liu, ``An overview of solutions to the bus bunching problem in urban bus systems,'' \textit{Frontiers of Engineering Management}, vol. 11, no. 4, p. 661, 2024. \url{https://doi.org/10.1007/s42524-024-0297-1}
 
-	\bibitem{22} Y. Lu et al., ``Digital Twin-driven smart transportation: A review,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, vol. 21, no. 8, pp. 3233--3247, 2020. \url{https://doi.org/10.1109/TITS.2020.2988332}
+\ 	\bibitem{22} Y. Lu et al., ``Digital Twin-driven smart transportation: A review,'' \textit{IEEE Transactions on Intelligent Transportation Systems}, vol. 21, no. 8, pp. 3233--3247, 2020. \url{https://doi.org/10.1109/TITS.2020.2988332}
 
-	\bibitem{23} M. S. Hossain and M. R. Karim, ``Digital Twin framework for proactive urban traffic management: A review,'' \textit{IEEE Access}, vol. 12, pp. 24510--24528, 2024.
+\ 	\bibitem{23} M. S. Hossain and M. R. Karim, ``Digital Twin framework for proactive urban traffic management: A review,'' \textit{IEEE Access}, vol. 12, pp. 24510--24528, 2024.
 
-	\bibitem{24} A. Kuncheria, ``Simulating the future: The role of Digital Twins in transportation planning,'' \textit{Institute of Transportation Studies Berkeley}, 2025.
+\ 	\bibitem{24} A. Kuncheria, ``Simulating the future: The role of Digital Twins in transportation planning,'' \textit{Institute of Transportation Studies Berkeley}, 2025.
 
-	\bibitem{25} M. Al-Azzawi et al., ``Architecting Digital Twins for Intelligent Transportation Systems,'' \textit{arXiv preprint arXiv:2502.17646}, Feb. 2025. \url{https://arxiv.org/abs/2502.17646}
+\ 	\bibitem{25} M. Al-Azzawi et al., ``Architecting Digital Twins for Intelligent Transportation Systems,'' \textit{arXiv preprint arXiv:2502.17646}, Feb. 2025. \url{https://arxiv.org/abs/2502.17646}
 
-	\bibitem{26} Y. He et al., ``Edge computing architectures for low-latency transit Digital Twins,'' \textit{IEEE Internet of Things Journal}, vol. 11, no. 4, pp. 5812--5825, 2024.
+\ 	\bibitem{26} Y. He et al., ``Edge computing architectures for low-latency transit Digital Twins,'' \textit{IEEE Internet of Things Journal}, vol. 11, no. 4, pp. 5812--5825, 2024.
 
-	\bibitem{27} K. Chen, ``Optimizing high-frequency transit operations via Edge-Cloud Digital Twin architectures,'' \textit{Journal of Advanced Transportation}, vol. 2025, 2025.
+\ 	\bibitem{27} K. Chen, ``Optimizing high-frequency transit operations via Edge-Cloud Digital Twin architectures,'' \textit{Journal of Advanced Transportation}, vol. 2025, 2025.
 
-	\bibitem{28} Bureau of Transportation Statistics, ``Assessing GTFS Accuracy,'' \textit{Mineta Transportation Institute}, 2025. \url{https://rosap.ntl.bts.gov/view/dot/77190}
+\ 	\bibitem{28} Bureau of Transportation Statistics, ``Assessing GTFS Accuracy,'' \textit{Mineta Transportation Institute}, 2025. \url{https://rosap.ntl.bts.gov/view/dot/77190}
 
-	\bibitem{29} Y. Zhang, ``Single Agent Robust Deep Reinforcement Learning for Bus Fleet Control,'' \textit{Transportation Safety and Environment}, tdag005, 2026. \url{https://doi.org/10.1093/tse/tdag005}
+\ 	\bibitem{29} Y. Zhang, ``Single Agent Robust Deep Reinforcement Learning for Bus Fleet Control,'' \textit{Transportation Safety and Environment}, tdag005, 2026. \url{https://doi.org/10.1093/tse/tdag005}
 
-	\bibitem{30} R. Wang, J. Zhang, and C. Liu, ``Spatio-temporal graph neural networks for short-term bus bunching prediction,'' \textit{Transportation Research Part C: Emerging Technologies}, vol. 158, 104432, 2024.
+\ 	\bibitem{30} R. Wang, J. Zhang, and C. Liu, ``Spatio-temporal graph neural networks for short-term bus bunching prediction,'' \textit{Transportation Research Part C: Emerging Technologies}, vol. 158, 104432, 2024.
 
 \end{thebibliography}
 

@@ -59,7 +59,7 @@ The instability of high-frequency transit lines was mathematically formalized by
 The proliferation of open transit data has enabled large-scale operational analyses. Aemmer et al. \cite{11} proposed methodologies to extract performance metrics from GTFS-RT components to classify systematic versus stochastic delays. However, the sheer volume of AVL data poses significant processing challenges \cite{12}. Traditional row-based relational databases (RDBMS) introduce significant latency during the calculation of sequential window functions (e.g., \texttt{LAG} operations over millions of rows) \cite{13}. To address this, recent studies have advocated for column-oriented, embedded analytical databases. Raasveldt and Mühleisen \cite{14} introduced DuckDB as a highly optimized in-process database capable of executing complex analytical queries without network overhead. The application of such architectures for city-scale transit delay prediction has been validated by Boudabbous et al. \cite{15}, emphasizing the need for multi-resolution feature engineering with minimal latency.
 
 \subsection{Machine Learning for Imbalanced Transit Data}
-Predicting bus bunching is inherently an imbalanced classification problem, as bunching events constitute a minority class (typically 5\% to 10\% of total observations) in nominal transit operations \cite{16}. In our raw pre-filtered longitudinal corpus, the deterioration class density is below 8\%; this value refers to the full stream before applying any transition-state conditioning. Standard threshold-based classifiers or models optimized for global accuracy fail to capture the minority class, leading to severe under-prediction of anomalies. Chen and Cheng \cite{17} demonstrated that utilizing imbalanced machine learning techniques---specifically focusing on the F1-Score and Precision-Recall Area Under the Curve (PR-AUC)---is mandatory to avoid estimation bias in transport models. Furthermore, Al-Fares et al. \cite{18} proved that handling class imbalance is critical for stochastic transportation anomaly prediction. While deep learning models like the BAT-transformer \cite{19} have shown high accuracy in arrival time prediction, they act as ``black boxes'' and demand high computational resources. In contrast, optimized logistic regression models provide the interpretability required by transit dispatchers while maintaining competitive predictive power if the spatio-temporal features are correctly engineered \cite{20}. Yang et al. \cite{21} provided a comprehensive overview of solutions, noting that while deep learning is popular, linear models with robust feature spaces are often more practical for real-time deployment.
+Predicting bus bunching is inherently an imbalanced classification problem, as bunching events constitute a minority class (typically 5\% to 10\% of total observations) in nominal transit operations \cite{16}. Standard threshold-based classifiers or models optimized for global accuracy fail to capture the minority class, leading to severe under-prediction of anomalies. Chen and Cheng \cite{17} demonstrated that utilizing imbalanced machine learning techniques---specifically focusing on the F1-Score and Precision-Recall Area Under the Curve (PR-AUC)---is mandatory to avoid estimation bias in transport models. Furthermore, Al-Fares et al. \cite{18} proved that handling class imbalance is critical for stochastic transportation anomaly prediction. While deep learning models like the BAT-transformer \cite{19} have shown high accuracy in arrival time prediction, they act as ``black boxes'' and demand high computational resources. In contrast, optimized logistic regression models provide the interpretability required by transit dispatchers while maintaining competitive predictive power if the spatio-temporal features are correctly engineered \cite{20}. Yang et al. \cite{21} provided a comprehensive overview of solutions, noting that while deep learning is popular, linear models with robust feature spaces are often more practical for real-time deployment.
 
 \subsection{Digital Twin Architectures and Edge Computing}
 A transit Digital Twin integrates real-time telemetry with predictive models to create a virtual replica of the physical fleet \cite{22,23}. Manandhar et al. \cite{24} outlined the structural requirements for sustainable public transportation DTs, highlighting the necessity for simulation-based ``what-if'' capabilities. However, these capabilities depend entirely on the low-latency generation of EWS. Al-Azzawi et al. \cite{25} proposed DT architectures for Intelligent Transportation Systems (ITS) that demand strict computational efficiency to enable continuous synchronization between the physical and virtual states. Consequently, edge-computing paradigms have been identified as a vital enabler for low-latency DTs \cite{26}. By processing data close to the source or utilizing highly efficient in-process analytical tools, transit agencies can circumvent the bottlenecks of centralized cloud architectures \cite{27}.
@@ -185,27 +185,23 @@ To isolate the effect of temporal depth in the sequential encoder, we evaluated 
 	\t\caption{Ablation Study: F1-Score by Sequential Window Depth}
 	\t\centering
 	\t\resizebox{\columnwidth}{!}{%
-		\t\begin{tabular}{@{}lc@{}}
-			\t\t\toprule
-			\t\t\textbf{Window} & \textbf{F1-Score} \\ \midrule
-			\t\t$n-1$           & 0.416             \\
-			\t\t$n-2$           & 0.425             \\
-			\t\t$n-3$           & 0.428             \\
-			\t\t$n-4$           & 0.427             \\
-			\t\t$n-5$           & 0.427             \\ \bottomrule
-			\t\end{tabular}%
-		\t}
+	\t\begin{tabular}{@{}lc@{}}
+		\t\t\toprule
+		\t\t\textbf{Window} & \textbf{F1-Score} \\ \midrule
+		\t\t$n-1$           & 0.416             \\
+		\t\t$n-2$           & 0.425             \\
+		\t\t$n-3$           & 0.428             \\
+		\t\t$n-4$           & 0.427             \\
+		\t\t$n-5$           & 0.427             \\ \bottomrule
+		\t\end{tabular}%
+	\t}
 	\t\label{tab:ablation}
 \end{table}
 
 The sequence reaches its discrete mathematical peak at $n-3$ ($F1=0.428$): the first finite difference is positive up to $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) and non-positive afterwards ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), indicating that deeper lags do not add predictive signal and instead saturate performance.
 
-This ablation F1 value (0.428) is intentionally lower than the 0.8227 reported in Table \ref{tab:performance} because both metrics answer different questions under different evaluation regimes. The ablation was computed over the global, highly imbalanced longitudinal corpus to isolate sequence-depth sensitivity under realistic class skew, while the performance-table F1 corresponds to a localized, route-specific hold-out protocol with class balancing during model fitting and threshold calibration.
-
 \subsection{Post-Filter Dataset Composition}
 Prior to model fitting, the longitudinal corpus contained 2,733,237 observations. Applying the strict transition-state filter ($B_{n-1}=0$) retained 1,979,230 actionable records. Within this filtered subset, 1,466,017 correspond to stable transitions ($0 \rightarrow 0$), whereas 513,213 correspond to critical deterioration events ($0 \rightarrow 1$).
-
-The apparent class-density jump is expected: the 25.9\% ratio reported here ($513,213/1,979,230$) is computed after the transition-state filter ($B_{n-1}=0$), whereas the ``below 8\%'' figure in Section III-E refers to the raw pre-filtered stream.
 
 \subsection{Spatial Generalization (Spatial Cross-Validation)}
 A critical requirement for an algorithm within a regional Digital Twin is its ability to generalize across different topographies without demanding corridor-specific retraining. The model trained on Route 14 was tested directly on Routes 38 and 49.
@@ -214,16 +210,16 @@ A critical requirement for an algorithm within a regional Digital Twin is its ab
 	\caption{Model Performance Metrics across Spatial Domains}
 	\centering
 	\resizebox{\columnwidth}{!}{%
-		\begin{tabular}{@{}lccc@{}}
-			\toprule
-			\textbf{Metric}      & \textbf{Route 14}   & \textbf{Route 38}          & \textbf{Route 49}          \\
-			                     & (Temporal Hold-out) & (Spatial Cross-Validation) & (Spatial Cross-Validation) \\ \midrule
-			Total Samples        & 11,811              & 46,007                     & 55,637                     \\
-			F1-Score ($\pm$ CI)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014         & 0.8576 $\pm$ 0.013         \\
-			Precision ($\pm$ CI) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008         & 0.9642 $\pm$ 0.007         \\
-			Recall               & 0.7241              & 0.7689                     & 0.7712                     \\
-			PR-AUC               & 0.765               & 0.792                      & 0.795                      \\ \bottomrule
-		\end{tabular}%
+	\begin{tabular}{@{}lccc@{}}
+		\toprule
+		\textbf{Metric}      & \textbf{Route 14}   & \textbf{Route 38}          & \textbf{Route 49}          \\
+		                     & (Temporal Hold-out) & (Spatial Cross-Validation) & (Spatial Cross-Validation) \\ \midrule
+		Total Samples        & 11,811              & 46,007                     & 55,637                     \\
+		F1-Score ($\pm$ CI)  & 0.8227 $\pm$ 0.021  & 0.8549 $\pm$ 0.014         & 0.8576 $\pm$ 0.013         \\
+		Precision ($\pm$ CI) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008         & 0.9642 $\pm$ 0.007         \\
+		Recall               & 0.7241              & 0.7689                     & 0.7712                     \\
+		PR-AUC               & 0.765               & 0.792                      & 0.795                      \\ \bottomrule
+	\end{tabular}%
 	}
 	\label{tab:performance}
 \end{table}
@@ -291,16 +287,16 @@ This latency translates to a throughput capacity of over 2.38 million AVL events
 To contextualize this latency against common analytics backends used in transit operations, Table \ref{tab:benchmark_context} compares representative per-record inference times. Relative to the Postgres baseline, the embedded DuckDB execution path yielded an observed acceleration of approximately 45x in this study.
 
 \begin{table}[htbp]
-	\caption{Per-record inference latency comparison across data backends}
-	\centering
-	\begin{tabular}{@{}lc@{}}
-		\toprule
-		\textbf{Backend} & \textbf{Latency (ms)} \\ \midrule
-		Pandas           & $\sim 10^{-1}$        \\
-		Postgres         & $\sim 10^{-2}$        \\
-		DuckDB           & 0.00042               \\ \bottomrule
-	\end{tabular}
-	\label{tab:benchmark_context}
+\caption{Per-record inference latency comparison across data backends}
+\centering
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Backend} & \textbf{Latency (ms)} \\ \midrule
+Pandas   & $\sim 10^{-1}$ \\
+Postgres & $\sim 10^{-2}$ \\
+DuckDB   & 0.00042 \\ \bottomrule
+\end{tabular}
+\label{tab:benchmark_context}
 \end{table}
 
 \section{Discussion and Future Work}

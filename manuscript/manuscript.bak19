@@ -200,8 +200,6 @@ To isolate the effect of temporal depth in the sequential encoder, we evaluated 
 
 The sequence reaches its discrete mathematical peak at $n-3$ ($F1=0.428$): the first finite difference is positive up to $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) and non-positive afterwards ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), indicating that deeper lags do not add predictive signal and instead saturate performance.
 
-This ablation F1 value (0.428) is intentionally lower than the 0.8227 reported in Table \ref{tab:performance} because both metrics answer different questions under different evaluation regimes. The ablation was computed over the global, highly imbalanced longitudinal corpus to isolate sequence-depth sensitivity under realistic class skew, while the performance-table F1 corresponds to a localized, route-specific hold-out protocol with class balancing during model fitting and threshold calibration.
-
 \subsection{Post-Filter Dataset Composition}
 Prior to model fitting, the longitudinal corpus contained 2,733,237 observations. Applying the strict transition-state filter ($B_{n-1}=0$) retained 1,979,230 actionable records. Within this filtered subset, 1,466,017 correspond to stable transitions ($0 \rightarrow 0$), whereas 513,213 correspond to critical deterioration events ($0 \rightarrow 1$).
 

@@ -201,8 +201,6 @@ Para aislar el efecto de la profundidad temporal del codificador secuencial, eva
 
 La secuencia alcanza su pico matemático discreto en $n-3$ ($F1=0.428$): la primera diferencia finita es positiva hasta $n-3$ ($\Delta_{1\rightarrow2}=+0.009$, $\Delta_{2\rightarrow3}=+0.003$) y no positiva después ($\Delta_{3\rightarrow4}=-0.001$, $\Delta_{4\rightarrow5}=0.000$), lo que indica que rezagos más profundos no agregan señal predictiva y saturan el desempeño.
 
-Este F1 de ablación (0.428) es intencionalmente menor que el 0.8227 de la Tabla \ref{tab:performance} porque ambas métricas responden preguntas distintas bajo regímenes de evaluación diferentes. La ablación se calculó sobre el corpus longitudinal global y altamente desbalanceado para aislar la sensibilidad a la profundidad secuencial, mientras que el F1 de la tabla de desempeño corresponde a una evaluación hold-out localizada por ruta, con balanceo de clases durante el ajuste del modelo y la calibración del umbral.
-
 \subsection{Composición del Conjunto de Datos Post-Filtro}
 Antes del ajuste del modelo, el corpus longitudinal contenía 2,733,237 observaciones. Al aplicar el filtro estricto de estado de transición ($B_{n-1}=0$), se retuvieron 1,979,230 registros accionables. Dentro de este subconjunto filtrado, 1,466,017 corresponden a transiciones estables ($0 \rightarrow 0$), mientras que 513,213 corresponden a eventos críticos de deterioro ($0 \rightarrow 1$).
 

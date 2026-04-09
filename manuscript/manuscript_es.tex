@@ -182,6 +182,7 @@ Para aislar el efecto de la profundidad temporal del codificador secuencial, eva
 \begin{table}[htbp]
 	\t\caption{Estudio de Ablación: F1-Score por Profundidad de Ventana Secuencial}
 	\t\centering
+	\t\resizebox{\columnwidth}{!}{%
 	\t\begin{tabular}{@{}lc@{}}
 		\t\t\toprule
 		\t\t\textbf{Ventana} & \textbf{F1-Score} \\ \midrule
@@ -190,7 +191,8 @@ Para aislar el efecto de la profundidad temporal del codificador secuencial, eva
 		\t\t$n-3$            & 0.428             \\
 		\t\t$n-4$            & 0.427             \\
 		\t\t$n-5$            & 0.427             \\ \bottomrule
-		\t\end{tabular}
+		\t\end{tabular}%
+	\t}
 	\t\label{tab:ablation}
 \end{table}
 
@@ -205,6 +207,7 @@ Un requisito crítico para un algoritmo dentro de un DT regional es generalizar 
 \begin{table}[htbp]
 	\caption{Métricas de desempeño del modelo en dominios espaciales}
 	\centering
+	\resizebox{\columnwidth}{!}{%
 	\begin{tabular}{@{}lccc@{}}
 		\toprule
 		\textbf{Métrica}     & \textbf{Ruta 14}    & \textbf{Ruta 38}              & \textbf{Ruta 49}              \\
@@ -214,7 +217,8 @@ Un requisito crítico para un algoritmo dentro de un DT regional es generalizar 
 		Precisión ($\pm$ IC) & 0.9521 $\pm$ 0.021  & 0.9610 $\pm$ 0.008            & 0.9642 $\pm$ 0.007            \\
 		Recall               & 0.7241              & 0.7689                        & 0.7712                        \\
 		PR-AUC               & 0.765               & 0.792                         & 0.795                         \\ \bottomrule
-	\end{tabular}
+	\end{tabular}%
+	}
 	\label{tab:performance}
 \end{table}
 

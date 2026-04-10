@@ -58,9 +58,9 @@ def fig1_headway_distribution(df: pd.DataFrame, route_id: str, output_dir: Path)
     ax.set_ylabel("Frequency")
     ax.set_title(f"Route {route_id} — Headway Deviation Distribution")
     ax.legend()
-    fig.savefig(output_dir / f"fig1_headway_dist_{route_id}.png")
+    fig.savefig(output_dir / f"fig1_headway_dist_{route_id}.pdf")
     plt.close(fig)
-    logger.info("Saved fig1_headway_dist_%s.png", route_id)
+    logger.info("Saved fig1_headway_dist_%s.pdf", route_id)
 
 
 def fig2_headway_timeseries(df: pd.DataFrame, route_id: str, output_dir: Path) -> None:
@@ -90,9 +90,9 @@ def fig2_headway_timeseries(df: pd.DataFrame, route_id: str, output_dir: Path) -
     ax.set_title(f"Route {route_id} — Headway Over Time")
     ax.legend()
     fig.autofmt_xdate()
-    fig.savefig(output_dir / f"fig2_headway_ts_{route_id}.png")
+    fig.savefig(output_dir / f"fig2_headway_ts_{route_id}.pdf")
     plt.close(fig)
-    logger.info("Saved fig2_headway_ts_%s.png", route_id)
+    logger.info("Saved fig2_headway_ts_%s.pdf", route_id)
 
 
 def fig3_delay_drift_profile(df: pd.DataFrame, route_id: str, output_dir: Path) -> None:
@@ -114,9 +114,9 @@ def fig3_delay_drift_profile(df: pd.DataFrame, route_id: str, output_dir: Path) 
     ax.set_ylabel("Drift from Origin (seconds)")
     ax.set_title(f"Route {route_id} — Delay Drift Profile")
     ax.legend(title="Period")
-    fig.savefig(output_dir / f"fig3_delay_drift_{route_id}.png")
+    fig.savefig(output_dir / f"fig3_delay_drift_{route_id}.pdf")
     plt.close(fig)
-    logger.info("Saved fig3_delay_drift_%s.png", route_id)
+    logger.info("Saved fig3_delay_drift_%s.pdf", route_id)
 
 
 def fig4_bunching_heatmap(df: pd.DataFrame, route_id: str, output_dir: Path) -> None:
@@ -134,9 +134,9 @@ def fig4_bunching_heatmap(df: pd.DataFrame, route_id: str, output_dir: Path) -> 
     ax.set_xlabel("Stop Sequence")
     ax.set_ylabel("Hour of Day")
     ax.set_title(f"Route {route_id} — Bunching Events (Time × Space)")
-    fig.savefig(output_dir / f"fig4_bunching_heatmap_{route_id}.png")
+    fig.savefig(output_dir / f"fig4_bunching_heatmap_{route_id}.pdf")
     plt.close(fig)
-    logger.info("Saved fig4_bunching_heatmap_%s.png", route_id)
+    logger.info("Saved fig4_bunching_heatmap_%s.pdf", route_id)
 
 
 def fig5_correlation_matrix(
@@ -216,6 +216,6 @@ def fig5_correlation_matrix(
     fig, ax = plt.subplots(figsize=(7, 6))
     sns.heatmap(corr, annot=True, fmt=".2f", cmap="RdBu_r", center=0, ax=ax)
     ax.set_title(f"Route {route_id} — Metric Correlations")
-    fig.savefig(output_dir / f"fig5_correlation_{route_id}.png")
+    fig.savefig(output_dir / f"fig5_correlation_{route_id}.pdf")
     plt.close(fig)
-    logger.info("Saved fig5_correlation_%s.png", route_id)
+    logger.info("Saved fig5_correlation_%s.pdf", route_id)

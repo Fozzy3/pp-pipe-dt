@@ -25,20 +25,26 @@ def compute_headway_deviation(
         stop_id, direction_id, snapshot_ts, vehicle_id, actual_headway_s,
         median_headway_s, deviation_s, deviation_pct
     """
-    # Get vehicle positions at stops for this route, ordered by stop and time
+    # Get vehicle positions enriched with stop_id from matching trip updates.
+    # vehicle_positions does not store stop_id directly.
     df = store.query_df(
         """
         SELECT
-            snapshot_ts,
-            vehicle_id,
-            stop_id,
-            direction_id,
-            stop_sequence,
-            current_status
-        FROM vehicle_positions
-        WHERE route_id = ?
-          AND stop_id IS NOT NULL
-          AND direction_id IS NOT NULL
+            vp.snapshot_ts,
+            vp.vehicle_id,
+            tu.stop_id,
+            vp.direction_id,
+            vp.stop_sequence,
+            vp.current_status
+        FROM vehicle_positions AS vp
+        INNER JOIN trip_updates AS tu
+            ON vp.snapshot_ts = tu.snapshot_ts
+           AND vp.trip_id = tu.trip_id
+           AND vp.stop_sequence = tu.stop_sequence
+           AND vp.route_id = tu.route_id
+        WHERE vp.route_id = ?
+          AND tu.stop_id IS NOT NULL
+          AND vp.direction_id IS NOT NULL
         ORDER BY stop_id, direction_id, snapshot_ts
         """,
         [route_id],

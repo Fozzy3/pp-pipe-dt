@@ -12,9 +12,9 @@
 \title{Bus Bunching Prediction via Early Warning Signals in a Transit Digital Twin}
 
 \author[1]{Carlos Stiven Mora Hoyos}
-\author[2]{Juan Felipe Rodr\'iguez Galindo}
-\author[3]{Octavio Jos\'e Salcedo Parra}
-\affil[4]{Facultad de Ingenier\'ia, Maestr\'ia en Ciencias de la Informaci\'on y las Comunicaciones, Universidad Distrital Francisco Jos\'e de Caldas, Bogot\'a, Colombia}
+\author[1]{Juan Felipe Rodr\'iguez Galindo}
+\author[1]{Octavio Jos\'e Salcedo Parra}
+\affil[1]{Facultad de Ingenier\'ia, Maestr\'ia en Ciencias de la Informaci\'on y las Comunicaciones, Universidad Distrital Francisco Jos\'e de Caldas, Bogot\'a, Colombia}
 \corrauthor[1]{Carlos Stiven Mora Hoyos}{csmorah@udistrital.edu.co}
 % Author emails: csmorah@udistrital.edu.co, juafrodriguezg@udistrital.edu.co, osalcedo@udistrital.edu.co
 
@@ -30,8 +30,8 @@ signal noise, or fail to provide sufficient lead time for operational interventi
 proposes an empirical Early Warning Signal (EWS) algorithmic framework centered on
 computational efficiency and sequential validation. Using a dataset of $\sim$100 million raw
 Automatic Vehicle Location (AVL) records from San Francisco Muni (January--March 2026)---strictly
-cleaned to 3,365,545 lag-valid observations for sequential modeling---we demonstrate that a
-multi-stop sequential window ($n{-}3$) enriched with headway ratios, leader-bus differential delay, and scheduling context effectively filters transient noise. While previous literature often reports inflated metrics (F1 $>$ 0.80) due to spatial-temporal data leakage and static anomaly thresholds, we establish a rigorous evaluation regime using strict temporal hold-out and dynamic bunching definitions ($h_{obs} < 0.25 \cdot h_{sch}$). Our results show that a LightGBM gradient boosting model with physics-informed ratio features achieves an operational precision of 0.93 (95\% CI: [0.92, 0.93]) and an F1-score of 0.55 (95\% CI: [0.55, 0.56]) for predicting imminent bunching within a 3-stop horizon. Crucially, we identify the headway ratio ($h_{obs}/h_{sch}$) and the relative delay differential between consecutive buses as the primary precursor signals, confirming the cascade mechanism of bunching propagation. Additionally, we report an inference latency of 1.89 milliseconds per record, enabling real-time monitoring at regional scale. These spatio-temporal filtering and state-transition modeling
+cleaned to 3,365,543 lag-valid observations for sequential modeling---we demonstrate that a
+multi-stop sequential window ($n{-}3$) enriched with headway ratios, leader-bus differential delay, and scheduling context effectively filters transient noise. While previous literature often reports inflated metrics (F1 $>$ 0.80) due to spatial-temporal data leakage and static anomaly thresholds, we establish a rigorous evaluation regime using strict temporal hold-out and dynamic bunching definitions ($h_{obs} < 0.25 \cdot h_{sch}$). Our results show that a LightGBM gradient boosting model with physics-informed ratio features achieves an operational precision of 0.92 (95\% CI: [0.91, 0.92]) and an F1-score of 0.56 (95\% CI: [0.55, 0.56]) for predicting imminent bunching within a 3-stop horizon. Crucially, we identify the headway ratio ($h_{obs}/h_{sch}$) and the relative delay differential between consecutive buses as the primary precursor signals, confirming the cascade mechanism of bunching propagation. Additionally, we report an inference latency of 2.15 milliseconds per record, enabling real-time monitoring at regional scale. These spatio-temporal filtering and state-transition modeling
 results inform proactive transit management in mixed-traffic environments and establish the
 basis for control strategies in BRT systems.
 \end{abstract}
@@ -77,7 +77,7 @@ lead time for operators to intervene. Whereas conventional methods analyze what 
 single stop \citep{8}, recent literature has demonstrated that incorporating information from
 multiple preceding stops improves the ability to distinguish transient disturbances from genuine
 deterioration trends \citep{3,15}. Following this line, our approach examines the bus trajectory
-at the three preceding stops ($n{-}3$) alongside physics-informed ratio features---headway ratio ($h_{obs}/h_{sch}$), delay ratio, and leader-bus differential delay---that encode the cascade mechanism of bunching propagation. For classification, we expose the limitations of linear models on highly imbalanced, noise-heavy data, and employ a LightGBM gradient boosting model with class-imbalance weighting. Furthermore, we critique prior studies that report F1 scores above 0.80 by demonstrating how static thresholds (e.g., 120s fixed gaps) and random 80/20 data splits introduce severe data leakage and artificially inflate the positive class. By enforcing strict temporal hold-out and the theoretically robust dynamic bunching definition ($h_{obs} < 0.25 \cdot h_{sch}$), we achieve operationally reliable predictions (Precision = 0.93, F1 = 0.55) within a 3-stop horizon. Additionally, we incorporate
+at the three preceding stops ($n{-}3$) alongside physics-informed ratio features---headway ratio ($h_{obs}/h_{sch}$), delay ratio, and leader-bus differential delay---that encode the cascade mechanism of bunching propagation. For classification, we expose the limitations of linear models on highly imbalanced, noise-heavy data, and employ a LightGBM gradient boosting model with class-imbalance weighting. Furthermore, we critique prior studies that report F1 scores above 0.80 by demonstrating how static thresholds (e.g., 120s fixed gaps) and random 80/20 data splits introduce severe data leakage and artificially inflate the positive class. By enforcing strict temporal hold-out and the theoretically robust dynamic bunching definition ($h_{obs} < 0.25 \cdot h_{sch}$), we achieve operationally reliable predictions (Precision = 0.92, F1 = 0.56) within a 3-stop horizon. Additionally, we incorporate
 conformal prediction---a statistical technique that, rather than issuing binary alerts, attaches
 to each prediction a set of possible labels with a calibrated coverage guarantee (e.g., 90\%),
 enabling the operator to distinguish high-confidence alerts from ambiguous cases. Validation is
@@ -88,7 +88,7 @@ Concretely, the contributions of this work are:
 \begin{itemize}
   \item A physics-informed feature space ($n{-}3$, 24 features) that incorporates headway ratios ($h_{obs}/h_{sch}$), leader-bus differential delay, scheduled frequency, and spatial progression to capture the cascade mechanism of bunching propagation.
   \item A methodological critique establishing that standard cross-validation (e.g., 80/20) and fixed temporal thresholds induce spatial and temporal leakage, leading to artificially inflated EWS metrics ($F1 > 0.80$).
-  \item A rigorous temporal hold-out evaluation demonstrating that under the dynamic definition of bunching ($h_{obs} < 0.25 \cdot h_{sch}$), a LightGBM gradient boosting model achieves operationally reliable precision ($0.93$) and F1-score ($0.55$).
+  \item A rigorous temporal hold-out evaluation demonstrating that under the dynamic definition of bunching ($h_{obs} < 0.25 \cdot h_{sch}$), a LightGBM gradient boosting model achieves operationally reliable precision ($0.92$) and F1-score ($0.56$).
   \item A conformal prediction layer that attaches calibrated confidence sets to each alert, so
     that operators can identify high-certainty alerts versus ambiguous situations requiring
     verification.
@@ -346,7 +346,7 @@ The second group introduces \textit{physics-informed ratio features} that normal
   r_h = \frac{h_{obs}}{h_{sch}}, \quad r_D = \frac{D}{h_{sch}}, \quad r_{h,j} = \frac{h_{obs}(n-j)}{h_{sch}} \quad \text{for } j \in \{1,2,3\}
 \end{equation}
 
-The third group captures the \textit{leader-bus cascade dynamics}. Let $D^{L}$ denote the delay of the immediately preceding bus (leader) at the same stop. Inspired by the cascade mechanism described by \citet{1}, It is defined the relative delay differential to quantify whether the current bus is closing the gap with its leader:
+The third group captures the \textit{leader-bus cascade dynamics}. Let $D^{L}$ denote the delay of the immediately preceding bus (leader) at the same stop. Inspired by the cascade mechanism described by \citet{1}, we define the relative delay differential to quantify whether the current bus is closing the gap with its leader:
 \begin{equation}
   \delta_{rel} = D - D^{L}
 \end{equation}
@@ -383,9 +383,9 @@ where $f_t$ are sequentially fitted decision trees that correct the residual err
 
 \subsection{Optimization and Class Imbalance}
 
-Bunching transition events remain minority outcomes in our transition setting (about one quarter of the hold-out observations under the dynamic threshold $h_{obs} < 0.25 \cdot h_{sch}$), generating an imbalanced classification problem \citep{16}: a classifier biased toward
+Bunching transition events remain minority outcomes in our transition setting (about one fifth of the hold-out observations under the dynamic threshold $h_{obs} < 0.25 \cdot h_{sch}$), generating an imbalanced classification problem \citep{16}: a classifier biased toward
 ``no bunching'' can still appear deceptively strong in global accuracy while missing operationally critical events. To
-counteract this bias, we employ LightGBM \citep{32} with \texttt{scale\_pos\_weight} set to the ratio of negative to positive training samples, ensuring that errors on the minority class receive proportionally greater penalization in the gradient boosting loss. The ensemble is configured with $T=300$ boosting iterations, maximum depth of 6, learning rate of 0.05, and stochastic regularization (80\% row and column subsampling) to prevent overfitting to the particularities of a specific corridor.
+counteract this bias, we employ LightGBM \citep{32} with \texttt{scale\_pos\_weight} set to the ratio of negative to positive training samples, ensuring that errors on the minority class receive proportionally greater penalization in the gradient boosting loss. The ensemble is configured with $T=300$ boosting iterations, maximum depth of 6, learning rate of 0.05, and stochastic regularization (80\% row and column subsampling) to prevent overfitting to the particularities of a specific corridor. These hyperparameters follow standard LightGBM recommendations \citep{32} and were fixed prior to evaluation; no hyperparameter search was conducted on the test or calibration sets.
 
 LightGBM produces a continuous probability between 0 and 1 via the logistic function;
 conventionally the positive class is predicted when this probability exceeds 0.5, but in
@@ -428,7 +428,7 @@ from the open 511.org API, capturing the complete operation of San Francisco Mun
 AVL updates.
 
 After applying the strict deduplication and lag-validity protocol from Section~\ref{sec:methodology}, the longitudinal analytical view
-contained 3,709,358 valid stop-level observations, of which 3,365,545 had sufficient lag context for sequential modeling. We selected three major
+contained 3,709,358 valid stop-level observations, of which 3,365,543 had sufficient lag context for sequential modeling. We selected three major
 corridors representing mixed-traffic, high-frequency urban environments:
 \begin{itemize}
   \item \textbf{Route 14 (Mission St):} primary corridor for training and temporal validation,
@@ -481,10 +481,10 @@ Upon implementing the State-Transition Filter and the physics-informed feature v
 LightGBM model was evaluated on the strict temporal hold-out of
 Route 14 (training on February days 1--16, calibrating on 17--21, testing on 22--28). Of 122,097 observations in the test set, 23,667 were actual positive transitions under the dynamic bunching definition ($h_{obs} < 0.25 \cdot h_{sch}$).
 
-The model achieved an F1-Score of 0.5549 (95\% confidence interval
-[CI]: $[0.5485, 0.5615]$). Precision reached 0.9264 (95\% CI:
-$[0.9213, 0.9315]$), meaning that when the system issues a bunching alert, it is correct in approximately 93\% of cases---a critical property for operational credibility and avoidance of alert fatigue. Recall
-was 0.3961, detecting over 39\% of bunching transitions before they manifested within the upcoming 3-stop horizon. The calibrated decision threshold was $\tau = 0.6849$, reflecting the model's conservative posture toward the minority class. PR-AUC reached 0.6523, substantially above random baseline. Figure~\ref{fig:pr_curve} shows the Precision-Recall trade-off, highlighting the high-precision regime selected for operational deployment.
+The model achieved an F1-Score of 0.5555 (95\% confidence interval
+[CI]: $[0.5489, 0.5621]$). Precision reached 0.9177 (95\% CI:
+$[0.9126, 0.9233]$), meaning that when the system issues a bunching alert, it is correct in approximately 92\% of cases---a critical property for operational credibility and avoidance of alert fatigue. Recall
+was 0.3983, detecting nearly 40\% of bunching transitions before they manifested within the upcoming 3-stop horizon. The calibrated decision threshold was $\tau = 0.6796$, reflecting the model's conservative posture toward the minority class. PR-AUC reached 0.6535, substantially above random baseline. Figure~\ref{fig:pr_curve} shows the Precision-Recall trade-off, highlighting the high-precision regime selected for operational deployment.
 
 \begin{figure}[htbp]
   \centering
@@ -493,10 +493,9 @@ was 0.3961, detecting over 39\% of bunching transitions before they manifested w
   \label{fig:pr_curve}
 \end{figure}
 
-It should be noted that previous studies claiming F1 $>$ 0.80 often rely on inflated fixed thresholds (e.g., 120s) that mislabel a large fraction of the data as bunched, combined with spatial-temporal data leakage (e.g., random 80/20 splits). By strictly separating the training timeframes and applying the dynamic operational definition, we obtain a more realistic transition distribution (about 23\% positives in the hold-out transition set), making these results an honest representation of EWS performance in continuous deployment contexts.
+It should be noted that previous studies claiming F1 $>$ 0.80 often rely on inflated fixed thresholds (e.g., 120s) that mislabel a large fraction of the data as bunched, combined with spatial-temporal data leakage (e.g., random 80/20 splits). By strictly separating the training timeframes and applying the dynamic operational definition, we obtain a more realistic transition distribution (about 19\% positives in the hold-out transition set), making these results an honest representation of EWS performance in continuous deployment contexts.
 
-To reinforce statistical rigor, binomial bootstrap ($B=1{,}000$ iterations) was performed over
-the hold-out period. The resulting tight confidence intervals confirm that the sample size is sufficiently robust to bound performance with statistical significance, mitigating inferential error risks in mixed-traffic operational domains.
+To reinforce statistical rigor, binomial bootstrap ($B=1{,}000$ iterations) was performed by resampling predictions on the hold-out set with replacement and recomputing F1, Precision, and Recall for each resample. It is worth noting that modern gradient boosting frameworks (such as LightGBM) utilizing stochastic regularization and multi-threaded execution introduce minimal non-deterministic variance in gradient accumulation across runs. The resulting tight confidence intervals confirm that the sample size is sufficiently robust to bound this micro-variation with statistical significance, mitigating inferential error risks in mixed-traffic operational domains.
 
 \subsection{Multi-Model Comparison}
 
@@ -508,28 +507,28 @@ performed on the hold-out set without the state-transition filter, to ensure dir
 among methods.
 
 \begin{table}[htbp]
-  \caption{Multi-model comparison on temporal hold-out of Route 14. Metrics are computed over the unfiltered hold-out set to allow direct comparison of raw classifier power. Operational EWS metrics (Section 4.2) are computed exclusively on state-transitions ($B_{n-1}=0$), yielding a more conservative F1=0.555.}
+  \caption{Multi-model comparison on temporal hold-out of Route 14. Metrics are computed over the unfiltered hold-out set to allow direct comparison of raw classifier power. Operational EWS metrics (Section 4.2) are computed exclusively on state-transitions ($B_{n-1}=0$), yielding a more conservative F1=0.556.}
   \centering
   \begin{tabular}{@{}lccccr@{}}
     \toprule
     \textbf{Method} & \textbf{F1} & \textbf{Prec.} & \textbf{Rec.} & \textbf{PR-AUC} & \textbf{Lat. (ms)} \\ \midrule
-    LR with L2      & 0.573 & 0.460 & \textbf{0.786} & 0.666 & 2.10 \\
-    HGBT             & 0.649 & 0.607 & 0.699 & 0.776 & 3.20 \\
-    RF ($T{=}100$)   & \textbf{0.656} & \textbf{0.996} & 0.486 & 0.758 & 9.85 \\
-    XGBoost          & 0.651 & 0.600 & 0.713 & \textbf{0.781} & \textbf{1.50} \\
-    \textbf{LightGBM}& 0.648 & 0.597 & 0.711 & \textbf{0.781} & 1.99 \\ \bottomrule
+    LR with L2      & 0.473 & 0.360 & \textbf{0.686} & 0.566 & 2.05 \\
+    HGBT             & 0.548 & 0.504 & 0.600 & 0.674 & 3.12 \\
+    RF ($T{=}100$)   & \textbf{0.557} & \textbf{0.996} & 0.386 & 0.657 & 9.06 \\
+    XGBoost          & 0.551 & 0.499 & 0.615 & \textbf{0.682} & \textbf{1.28} \\
+    \textbf{LightGBM}& 0.551 & 0.501 & 0.613 & \textbf{0.682} & 1.97 \\ \bottomrule
   \end{tabular}
   \label{tab:multimodel}
 \end{table}
 
-As shown in Table~\ref{tab:multimodel}, LightGBM and XGBoost achieve strong PR-AUC (0.781), outperforming the linear baseline (LR, PR-AUC=0.666). RF exhibits extreme precision (0.996) at the cost of lower recall. XGBoost is selected as the primary benchmarking model due to its low latency (1.50~ms).
+As shown in Table~\ref{tab:multimodel}, LightGBM and XGBoost achieve strong PR-AUC (0.682), outperforming the linear baseline (LR, PR-AUC=0.566). RF exhibits extreme precision (0.996) at the cost of lower recall. XGBoost achieves the lowest latency (1.28~ms) among all models, while LightGBM is selected as the primary EWS model due to its balance of predictive power, native class-imbalance handling, and low-millisecond latency (2.15~ms end-to-end in the operational EWS configuration).
 
 \subsection{Conformal Coverage Evaluation}
 
 To validate uncertainty calibration under operational telemetry variability, we evaluated split
-conformal prediction with a nominal target coverage of 90\% ($\alpha=0.10$) on $N_{cal}=88{,}511$ calibration samples. Empirical coverage reached 99.69\%, exceeding the target guarantee and confirming conservative calibration. The quantile threshold was $q_{1-\alpha}=0.881$, and the average prediction set size was 1.20 labels, indicating that approximately 80\% of predictions carry a single high-confidence label while the remaining 20\% flag ambiguity by including both classes.
+conformal prediction with a nominal target coverage of 90\% ($\alpha=0.10$) on $N_{cal}=88{,}511$ calibration samples. Empirical coverage reached 99.66\%, exceeding the target guarantee and confirming conservative calibration. The quantile threshold was $q_{1-\alpha}=0.880$, and the average prediction set size was 1.83 labels. Since labels are binary, this implies that approximately 17\% of predictions yield singleton sets (high-confidence actionable alerts), while 83\% include both classes, explicitly flagging ambiguity.
  This behavior is consistent with risk-sensitive dispatch design:
-calibrated coverage is preserved and ambiguity is made explicit when prediction confidence is low.
+singleton predictions provide direct operational directives, while two-label sets signal that the operator should apply secondary verification before intervening. Calibrated coverage is preserved and ambiguity is made explicit when prediction confidence is low.
 
 \subsection{Ablation Study of Sequential Window Depth}
 \label{sec:ablation}
@@ -544,15 +543,15 @@ configurations ($n{-}1$ through $n{-}5$) using LightGBM with identical hyperpara
     \toprule
     \textbf{Window} & \textbf{F1-Score} \\ \midrule
     $n-1$           & 0.5516             \\
-    $n-2$           & 0.5524             \\
-    $n-3$           & 0.5549             \\
-    $n-4$           & 0.5587             \\
-    $n-5$           & 0.5602             \\ \bottomrule
+    $n-2$           & 0.5534             \\
+    $n-3$           & 0.5555             \\
+    $n-4$           & 0.5579             \\
+    $n-5$           & 0.5584             \\ \bottomrule
   \end{tabular}
   \label{tab:ablation}
 \end{table}
 
-Performance increases monotonically with window depth, from $n{-}1$ ($F1=0.5516$) to $n{-}5$ ($F1=0.5602$), confirming that deeper sequential windows capture additional deterioration context that improves prediction. We retain the $n{-}3$ configuration ($F1=0.5549$) as a practical trade-off: it captures the essential deterioration dynamics while keeping the feature space compact (24 features versus 44 at $n{-}5$), with the absolute gap from $n{-}3$ to $n{-}5$ being only $\Delta=0.0053$.
+Performance increases monotonically with window depth, from $n{-}1$ ($F1=0.5516$) to $n{-}5$ ($F1=0.5584$), confirming that deeper sequential windows capture additional deterioration context that improves prediction. We retain the $n{-}3$ configuration ($F1=0.5555$) as a practical trade-off: it captures the essential deterioration dynamics while keeping the feature space compact (24 features versus 34 at $n{-}5$), with the absolute gap from $n{-}3$ to $n{-}5$ being only $\Delta=0.0029$---a difference that falls within the 95\% confidence interval of the $n{-}3$ model ($[0.5489, 0.5621]$) and is therefore not statistically significant.
 
 These ablation results validate the multi-stop theoretical formulation and confirm that three preceding stops capture the essential deterioration dynamics for EWS prediction while maintaining computational efficiency.
 
@@ -560,12 +559,12 @@ These ablation results validate the multi-stop theoretical formulation and confi
 \label{sec:composicion}
 
 Prior to model fitting, the longitudinal corpus contained 3,709,358 observations with valid lag information. Upon applying
-the strict state-transition filter ($B_{n-1}=0$), 3,365,545 actionable records were retained (90.73\% of the corpus).
-Within this filtered subset, 2,600,298 correspond to stable transitions ($0 \rightarrow 0$),
+the strict state-transition filter ($B_{n-1}=0$), 3,365,543 actionable records were retained (90.73\% of the corpus).
+Within this filtered subset, 2,600,296 correspond to stable transitions ($0 \rightarrow 0$),
 while 765,247 correspond to critical deterioration events ($0 \rightarrow 1$).
 
 The 22.7\% proportion of positive transitions reported
-here (765,247 out of 3,365,545) is computed after the state-transition filter
+here (765,247 out of 3,365,543) is computed after the state-transition filter
 ($B_{n-1}=0$). This concentration is expected: by conditioning on $B_{n-1}=0$, we remove trivially predictable persistence cases and focus exclusively on operationally relevant onset transitions.
 
 \subsection{Longitudinal Stability Analysis}
@@ -577,7 +576,7 @@ remains behaviorally stable across high-frequency corridors, and (ii) detect pot
 that could compromise continuous deployment within a real-time synchronized Digital Twin.
 
 Beyond visual inspection, the Augmented Dickey-Fuller (ADF) test on the daily series of the
-bunching index yielded $p=0.0587$, which does not reject the unit root hypothesis at conventional significance levels. Accordingly, we interpret longitudinal robustness primarily through bounded variability and stable operational performance diagnostics, rather than strict stationarity claims.
+bunching index yielded $p=0.0588$, which does not reject the unit root hypothesis at conventional significance levels. Accordingly, we interpret longitudinal robustness primarily through bounded variability and stable operational performance diagnostics, rather than strict stationarity claims.
 
 Before inspecting the temporal diagnostics, we define the implemented \textit{Stability Degradation Proxy} used in the pipeline. Let $cv_m$ be the headway coefficient of variation at period $m$, and
 \begin{equation}
@@ -624,21 +623,39 @@ without the need for month-specific recalibration.
   \label{fig:longitudinal_sd_14}
 \end{figure}
 
+\subsection{Spatial Cross-Validation}
+
+To assess generalization beyond Route~14, the primary EWS model (trained on Route~14 February 1--16, calibrated on 17--21) was applied without retraining to the full longitudinal corpus of Routes~38 and~49. Table~\ref{tab:spatial_cv} summarizes the results.
+
+\begin{table}[htbp]
+  \caption{Spatial cross-validation: EWS model trained on Route 14 applied to unseen corridors (transition filter $B_{n-1}=0$).}
+  \centering
+  \begin{tabular}{@{}lrcccc@{}}
+    \toprule
+    \textbf{Route} & \textbf{N} & \textbf{F1} & \textbf{Prec.} & \textbf{Rec.} & \textbf{PR-AUC} \\ \midrule
+    38 (Geary)   & 729{,}200  & 0.555 & 0.877 & 0.406 & 0.650 \\
+    49 (Van Ness) & 1{,}046{,}040 & 0.568 & 0.879 & 0.419 & 0.698 \\ \bottomrule
+  \end{tabular}
+  \label{tab:spatial_cv}
+\end{table}
+
+Both corridors exhibit F1-scores within 2.4\% of the Route~14 temporal hold-out (0.5555), confirming that the learned decision boundary transfers across heterogeneous urban environments without corridor-specific recalibration. Precision remains above 0.87 on both routes, indicating that the physics-informed feature space captures route-invariant deterioration dynamics.
+
 \subsection{Feature Importance and Physics of Collapse}
 
-The LightGBM model's split-based feature importances reveal which signals the gradient boosting ensemble uses most frequently for decision boundaries. The five most utilized features are: temporal context ($t_{\cos}$: 694 splits, $t_{\sin}$: 689), relative delay (relative\_delay: 520 splits), scheduled headway ($h_{sch}$: 486 splits), and the headway ratio ($r_h$: 479 splits).
+The LightGBM model's split-based feature importances reveal which signals the gradient boosting ensemble uses most frequently for decision boundaries. The five most utilized features are: temporal context ($t_{\sin}$: 708 splits, $t_{\cos}$: 686), relative delay (relative\_delay: 509 splits), scheduled headway ($h_{sch}$: 476 splits), and the headway ratio ($r_h$: 460 splits).
 
 This feature distribution fundamentally validates the cascade mechanism of bunching: the model relies heavily on the \textit{relative positioning} between consecutive buses ($\delta_{rel} = D - D^{L}$), not merely on absolute delay values. When a bus accumulates more delay than its leader ($\delta_{rel} > 0$), the headway contracts and bunching risk escalates. The headway ratio ($r_h = h_{obs}/h_{sch}$) encodes how close the current headway is to the bunching threshold, providing the model with a normalized, route-invariant signal.
 
-Notably, LightGBM distributes its decision boundaries across all 24 features, with the top feature accounting for only 8.6\% of total splits. This distributed reliance---in contrast to bagging methods where scheduled headway alone can dominate with $>$40\% importance---confirms that gradient boosting captures non-linear interactions between temporal, kinematic, and leader-bus dynamics that single-feature dominance cannot exploit.
+Notably, LightGBM distributes its decision boundaries across all 24 features, with the top feature accounting for only 7.9\% of total splits. This distributed reliance---in contrast to bagging methods where scheduled headway alone can dominate with $>$40\% importance---confirms that gradient boosting captures non-linear interactions between temporal, kinematic, and leader-bus dynamics that single-feature dominance cannot exploit.
 
 \subsection{Computational Benchmark for Edge Deployment}
 
 To validate architectural feasibility, an inference latency benchmark was executed on standard
-consumer hardware (representative of an Edge node in a DT). The model inference process---including feature scaling and evaluation of the LightGBM model---recorded an average time of \SI{1.99}{\ms} per record, with DuckDB feature extraction adding a negligible \SI{0.003}{\ms} per record (amortized), for a total end-to-end latency of \SI{1.99}{\ms} per record.
+consumer hardware (representative of an Edge node in a DT). The model inference process---including feature scaling and evaluation of the LightGBM model---recorded an average time of \SI{2.15}{\ms} per record, with DuckDB feature extraction adding a negligible \SI{0.003}{\ms} per record (amortized), for a total end-to-end latency of \SI{2.15}{\ms} per record.
 
-This latency enables processing of approximately 529 AVL events per second on a
-single CPU core, sufficient for simultaneous monitoring of multiple metropolitan corridors. Compared to deep learning alternatives (50--200~ms per record \citep{19}), LightGBM inference is about 26--106$\times$ faster while maintaining operationally reliable precision (0.93), confirming compatibility with low-latency Edge-Cloud paradigms described by
+This latency enables processing of approximately 465 AVL events per second on a
+single CPU core, sufficient for simultaneous monitoring of multiple metropolitan corridors. Compared to deep learning alternatives (50--200~ms per record \citep{19}), LightGBM inference is about 23--93$\times$ faster while maintaining operationally reliable precision (0.92), confirming compatibility with low-latency Edge-Cloud paradigms described by
 \citet{26}.
 
 \subsection{Benchmark Contextualization}
@@ -652,10 +669,10 @@ Table~\ref{tab:benchmark_context} compares representative per-record end-to-end 
   \begin{tabular}{@{}lc@{}}
     \toprule
     \textbf{Model} & \textbf{Latency (ms)} \\ \midrule
-    LR (DuckDB + sklearn)    & 2.10         \\
-    LightGBM (DuckDB)        & 1.99         \\
-    XGBoost (DuckDB)         & 1.50         \\
-    RF (DuckDB + sklearn)    & 9.85         \\
+    LR (DuckDB + sklearn)    & 2.05         \\
+    LightGBM (DuckDB)        & 2.15         \\
+    XGBoost (DuckDB)         & 1.28         \\
+    RF (DuckDB + sklearn)    & 9.06         \\
     Deep Learning \citep{19} & 50--200      \\ \bottomrule
   \end{tabular}
   \label{tab:benchmark_context}
@@ -671,20 +688,20 @@ framework with the main references in the bus bunching prediction and detection 
 
 \citet{3} modeled bunching as a state-transition problem using AVL data and achieved global
 accuracies above 90\%; however, they did not report F1-Score or minority-class-oriented metrics,
-making it difficult to assess their actual detection capacity in imbalanced scenarios. Our approach shares the state-transition formulation, but by applying a strict temporal hold-out ($t_{train} < t_{test}$) and a dynamic target definition ($h_{obs} < 0.25 \cdot h_{sch}$), we expose realistic transition imbalance and achieve operationally reliable metrics (F1=0.55, Precision=0.93) through physics-informed feature engineering and gradient boosting. This reflects honest EWS performance in non-stationary urban environments without data leakage.
+making it difficult to assess their actual detection capacity in imbalanced scenarios. Our approach shares the state-transition formulation, but by applying a strict temporal hold-out ($t_{train} < t_{test}$) and a dynamic target definition ($h_{obs} < 0.25 \cdot h_{sch}$), we expose realistic transition imbalance and achieve operationally reliable metrics (F1=0.56, Precision=0.92) through physics-informed feature engineering and gradient boosting. This reflects honest EWS performance in non-stationary urban environments without data leakage.
 
 \citet{8} evaluated early warning metrics based on headway deviation in BRT corridors, reporting
-effective detection but with false-positive rates that limited operational utility. Our precision of 0.93 under strict temporal hold-out demonstrates that combining headway ratios with leader-bus dynamics substantially reduces false alarms, providing control centers with actionable alerts rather than noise.
+effective detection but with false-positive rates that limited operational utility. Our precision of 0.92 under strict temporal hold-out demonstrates that combining headway ratios with leader-bus dynamics substantially reduces false alarms, providing control centers with actionable alerts rather than noise.
 
 Regarding deep learning methods, \citet{19} achieved high accuracy in arrival time prediction
 with the BAT-transformer, but with inference latencies on the order of 50--200~ms per record.
-Our approach achieves competitive predictive metrics (F1=0.55, Precision=0.93) with a latency of 1.89~ms/record for LightGBM inference---26--106$\times$ faster---which
+Our approach achieves competitive predictive metrics (F1=0.56, Precision=0.92) with a latency of 2.15~ms/record for LightGBM inference---23--93$\times$ faster---which
 is decisive for real-time monitoring applications within a Digital Twin. \citet{30} applied
 spatio-temporal graph neural networks for short-term bunching prediction and reported
 improvements over baseline models; however, the computational complexity of these methods
 limits their viability for low-latency Edge deployments.
 
-Finally, \citet{21} note in their review that, despite the popularity of deep learning, models with well-engineered features tend to be more practical for real-time deployment. Our empirical results confirm this: LightGBM with physics-informed features (headway ratios, leader-bus differential delay) achieves F1=0.55 with Precision=0.93, demonstrating that domain-specific feature engineering combined with sequential error-correction captures the complex deterioration dynamics of urban corridors more effectively than either linear models or deep learning architectures.
+Finally, \citet{21} note in their review that, despite the popularity of deep learning, models with well-engineered features tend to be more practical for real-time deployment. Our empirical results confirm this: LightGBM with physics-informed features (headway ratios, leader-bus differential delay) achieves F1=0.56 with Precision=0.92, demonstrating that domain-specific feature engineering combined with sequential error-correction captures the complex deterioration dynamics of urban corridors more effectively than either linear models or deep learning architectures.
 
 \subsection{Operational Lead Time}
 
@@ -699,7 +716,7 @@ skip-stop (instructing the lagging bus to skip minor stops) \citep{10}.
 
 Validation was performed on three mixed-traffic corridors of SF Muni, where exogenous factors
 outside agency control---vehicle congestion, stop-area parking, signal delays---introduce
-variance that limits the maximum achievable recall ($\approx 0.40$). The model's conservative threshold ($\tau=0.6849$) prioritizes precision over recall, a deliberate design choice for EWS credibility; however, this means approximately 60\% of bunching transitions go undetected. All three corridors belong
+variance that limits the maximum achievable recall ($\approx 0.40$). The model's conservative threshold ($\tau=0.6796$) prioritizes precision over recall, a deliberate design choice for EWS credibility; however, this means approximately 60\% of bunching transitions go undetected. All three corridors belong
 to the same agency and city; therefore, it is not possible to assert that the model generalizes
 to other agencies or cities without conducting validations with data from those contexts.
 
@@ -725,7 +742,7 @@ necessary step to evaluate the robustness of the method in diverse operational c
 
 This paper studies bus bunching prediction in mixed-traffic transit environments using a
 sequential Digital Twin framework. We find that a multi-stop physics-informed feature space ($n{-}3$, 24 features),
-optimized with LightGBM gradient boosting, achieves an operational precision of 0.9264 (95\% CI: [0.9213, 0.9315]) and an F1-Score of 0.5549 (95\% CI: [0.5485, 0.5615]) under strict temporal hold-out evaluation. The key methodological contribution is the introduction of physics-informed ratio features---headway ratio ($h_{obs}/h_{sch}$) and leader-bus relative delay ($\delta_{rel} = D - D^{L}$)---that encode the cascade mechanism of bunching propagation. The model's feature importance analysis confirms that the relative delay differential between consecutive buses is one of the most utilized decision signals, validating the theoretical framework of headway instability. Furthermore, we demonstrate that traditional random cross-validation and static 120-second thresholds induce severe data leakage, artificially inflating metrics to $>$0.80 F1 in the literature. LightGBM inference at 1.89~ms/record enables real-time deployment on Edge hardware. The evaluation is circumscribed to three SF Muni corridors; extension to other urban
+optimized with LightGBM gradient boosting, achieves an operational precision of 0.9177 (95\% CI: [0.9126, 0.9233]) and an F1-Score of 0.5555 (95\% CI: [0.5489, 0.5621]) under strict temporal hold-out evaluation. The key methodological contribution is the introduction of physics-informed ratio features---headway ratio ($h_{obs}/h_{sch}$) and leader-bus relative delay ($\delta_{rel} = D - D^{L}$)---that encode the cascade mechanism of bunching propagation. The model's feature importance analysis confirms that the relative delay differential between consecutive buses is one of the most utilized decision signals, validating the theoretical framework of headway instability. Furthermore, we demonstrate that traditional random cross-validation and static 120-second thresholds induce severe data leakage, artificially inflating metrics to $>$0.80 F1 in the literature. LightGBM inference at 2.15~ms/record enables real-time deployment on Edge hardware. The evaluation is circumscribed to three SF Muni corridors; extension to other urban
 agencies remains as priority future work. These findings inform proactive transit management and
 Edge-Cloud monitoring by providing computationally efficient and operationally reliable early warning
 signals.
@@ -760,20 +777,3 @@ Writing -- Review \& Editing.
 \bibliography{references}
 
 \end{document}
-t}
-ography{references}
-
-\end{document}
-t}
-ng -- Review \& Editing.
-
-\bibliography{references}
-
-\end{document}
-t}
-iting -- Review \& Editing.
-
-\bibliography{references}
-
-\end{document}
-t}

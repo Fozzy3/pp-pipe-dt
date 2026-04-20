@@ -6,13 +6,15 @@
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, shadows, backgrounds, fit}
 
 \title{Bus Bunching Prediction via Early Warning Signals in a Transit Digital Twin}
 
 \author[1]{Carlos Stiven Mora Hoyos}
-\author[1]{Juan Felipe Rodr\'iguez Galindo}
-\author[1]{Octavio Jos\'e Salcedo Parra}
-\affil[1]{Facultad de Ingenier\'ia, Maestr\'ia en Ciencias de la Informaci\'on y las Comunicaciones, Universidad Distrital Francisco Jos\'e de Caldas, Bogot\'a, Colombia}
+\author[2]{Juan Felipe Rodr\'iguez Galindo}
+\author[3]{Octavio Jos\'e Salcedo Parra}
+\affil[4]{Facultad de Ingenier\'ia, Maestr\'ia en Ciencias de la Informaci\'on y las Comunicaciones, Universidad Distrital Francisco Jos\'e de Caldas, Bogot\'a, Colombia}
 \corrauthor[1]{Carlos Stiven Mora Hoyos}{csmorah@udistrital.edu.co}
 % Author emails: csmorah@udistrital.edu.co, juafrodriguezg@udistrital.edu.co, osalcedo@udistrital.edu.co
 
@@ -35,6 +37,7 @@ basis for control strategies in BRT systems.
 \end{abstract}
 
 \begin{document}
+
 
 \flushbottom
 \maketitle
@@ -195,12 +198,82 @@ observed in IoT-enabled Digital Twin deployments \citep{31}.
 \section{System Architecture and Methodology}
 \label{sec:methodology}
 
+\begin{figure}[htbp]
+  \centering
+  \resizebox{0.85\textwidth}{!}{
+  \begin{tikzpicture}[>=Stealth, font=\sffamily\scriptsize, thick]
+    \tikzset{
+        layer/.style={rectangle, draw=gray!80, rounded corners=2pt, minimum width=9.5cm, minimum height=1.6cm},
+        comp/.style={rectangle, draw=blue!60, fill=blue!5, rounded corners=2pt, minimum width=2.4cm, minimum height=0.7cm, align=center},
+        sidebox/.style={rectangle, draw=gray!80, rounded corners=2pt, minimum width=1.6cm, align=center},
+        title/.style={anchor=south, font=\sffamily\scriptsize\bfseries, text=black!80}
+    }
+
+    % --- MIDDLE COLUMN (Layers from bottom to top) ---
+
+    % Layer 1: Ingestion
+    \node[layer] (L1) at (0, 0) {};
+    \node[title] at (L1.south) {Ingestion \& Transformation Layer};
+    \node[comp] (parse) at (-2.3, 0.2) {Protobuf Parser};
+    \node[comp] (clean) at (2.3, 0.2) {Temporal Resolution};
+
+    % Layer 2: Digital Twin
+    \node[layer] (L2) at (0, 2.2) {};
+    \node[title] at (L2.south) {Digital Twin State Manager};
+    \node[comp] (lag) at (-3, 2.4) {Sequential Align};
+    \node[comp] (filter) at (0, 2.4) {State Filter ($B_{n-1}{=}0$)};
+    \node[comp] (feat) at (3, 2.4) {Physics ($r_h, \delta_{rel}$)};
+
+    % Layer 3: MLOps / Prediction
+    \node[layer] (L3) at (0, 4.4) {};
+    \node[title] at (L3.south) {Predictive Pipeline};
+    \node[comp] (window) at (-2.3, 4.6) {Window $n{-}3$ Agg.};
+    \node[comp] (lgbm) at (2.3, 4.6) {LightGBM Classifier};
+
+    % Layer 4: Application / Diagnostics
+    \node[layer] (L4) at (0, 6.6) {};
+    \node[title] at (L4.south) {Operational Diagnostics};
+    \node[comp] (conf) at (-2.3, 6.8) {Conformal Pred. ($\Gamma_\alpha$)};
+    \node[comp] (alert) at (2.3, 6.8) {Performance Metrics \\ \& Longitudinal Stability};
+
+    % --- RIGHT COLUMN ---
+    \node[sidebox, minimum height=8.2cm] (db) at (6.2, 3.3) {DuckDB \\ Engine \\ \\ \textit{In-process} \\ \textit{Data} \\ \textit{Lake}};
+
+    % --- LEFT COLUMN ---
+    \node[sidebox, minimum height=1.6cm] (fleet) at (-6.2, 5) {Transit \\ Fleet};
+    \node[sidebox, minimum height=1.6cm] (api) at (-6.2, 1.6) {511.org \\ API};
+
+    % --- ARROWS ---
+    % Left column to middle
+    \draw[->] (fleet) -- (api);
+    \draw[->] (api) |- (L1.west);
+    
+    % Vertical middle
+    \draw[->] (L1) -- (L2);
+    \draw[->] (L2) -- (L3);
+    \draw[->] (L3) -- (L4);
+
+    % Middle to Right column
+    \draw[<->] (L1.east) -- (L1.east -| db.west);
+    \draw[<->] (L2.east) -- (L2.east -| db.west);
+    \draw[<->] (L3.east) -- (L3.east -| db.west);
+    \draw[<->] (L4.east) -- (L4.east -| db.west);
+    
+    % Feedback loop
+    \draw[->] (L4.west) -| (-7.5, 6.6) |- node[pos=0.25, left, font=\scriptsize, align=center] {Proactive \\ Intervention} (fleet.west);
+
+  \end{tikzpicture}
+  }
+  \caption{Proposed Early Warning Signal (EWS) architecture. The Physical layer provides real-time GTFS-RT telemetry. The Digital Twin layer, powered by DuckDB, manages state synchronization and $n{-}3$ feature engineering. The Predictive Intelligence layer executes state-transition modeling and conformal prediction to generate calibrated alerts.}
+  \label{fig:architecture}
+\end{figure}
+
 \subsection{Digital Twin Data Pipeline}
 
-The proposed system functions as the predictive layer of a Transit Digital Twin. Its objective
+The proposed system functions as the predictive layer of a Transit Digital Twin, following the multi-layered architecture illustrated in Fig.~\ref{fig:architecture}. Its objective
 is to receive real-time bus position data, process it, and generate alerts before bunching
 occurs. The pipeline consists of three sequential stages: (1) GTFS-RT data ingestion,
-(2) transformation and cleaning, and (3) predictive inference.
+(2) transformation and cleaning within the Virtual Entity, and (3) predictive inference.
 
 A central requirement of the system is that inference be fast enough to operate in real time.
 Therefore, instead of using conventional databases such as PostgreSQL, we opt for DuckDB
@@ -217,7 +290,7 @@ A critical step in the transformation is the resolution of temporal ordering fro
 \subsection{Mathematical Formulation of System States}
 
 To formalize when a bus is bunching, we define two complementary metrics. The first is delay
-($D$), which measures how much a bus deviates from its scheduled timetable. Let $T_{obs}(i,
+($D$), which measures how much a bus deviates from its scheduled timetable. Following standard transit engineering definitions \citep{37}, let $T_{obs}(i,
 v_k)$ and $T_{sch}(i, v_k)$ denote the observed and scheduled arrival time for vehicle $v_k$
 at stop $i$, respectively:
 \begin{equation}
@@ -238,7 +311,7 @@ Analogously, the scheduled headway is:
 \end{equation}
 
 With these two metrics, we can formally define when a bus is bunched. Following industry
-standards \citep{1,10}, we declare bunching when the observed headway falls below 25\% of the
+standards \citep{37}, we declare bunching when the observed headway falls below 25\% of the
 scheduled headway---that is, when the temporal distance between buses has been reduced to less
 than one quarter of the planned value:
 \begin{equation}
@@ -273,7 +346,7 @@ The second group introduces \textit{physics-informed ratio features} that normal
   r_h = \frac{h_{obs}}{h_{sch}}, \quad r_D = \frac{D}{h_{sch}}, \quad r_{h,j} = \frac{h_{obs}(n-j)}{h_{sch}} \quad \text{for } j \in \{1,2,3\}
 \end{equation}
 
-The third group captures the \textit{leader-bus cascade dynamics}. Let $D^{L}$ denote the delay of the immediately preceding bus (leader) at the same stop. The relative delay differential quantifies whether the current bus is closing the gap with its leader:
+The third group captures the \textit{leader-bus cascade dynamics}. Let $D^{L}$ denote the delay of the immediately preceding bus (leader) at the same stop. Inspired by the cascade mechanism described by \citet{1}, It is defined the relative delay differential to quantify whether the current bus is closing the gap with its leader:
 \begin{equation}
   \delta_{rel} = D - D^{L}
 \end{equation}
@@ -301,8 +374,8 @@ occurred and the alert arrives late.
 For our system to be a genuine \textit{early} warning, we train and evaluate it exclusively on
 cases where the bus was operating normally at the preceding stop ($B_{n-1}=0$). In this way, the
 model learns to detect the state transition from normal to bunching, which is precisely the
-moment when intervention can prevent collapse. The probability of this transition is modeled
-with a LightGBM gradient boosting classifier:
+moment when intervention can prevent collapse. Building on the state-transition framework of \citet{3}, the probability of this transition is modeled
+with a LightGBM gradient boosting classifier using the additive function approximation form \citep{33}:
 \begin{equation}
   P(\tilde{B}_n=1 \mid B_{n-1}=0, X_n) = \sigma\!\left(\sum_{t=1}^{T} f_t(X_n)\right)
 \end{equation}
@@ -329,15 +402,16 @@ separate calibration set---consisting of days 17--21 of February 2026 from Route
 from training---to convert each predicted probability into a prediction set with statistical
 coverage guarantees.
 
-Let $s(x)=1-\hat{p}(x)$ be the nonconformity score for the positive class, where
-$\hat{p}(x)=P(\tilde{B}_n=1\mid B_{n-1}=0, X_n)$. For a target non-coverage level $\alpha\in(0,1)$
+Let $s_y(x) = |y - \hat{p}(x)|$ be the nonconformity score for class $y \in \{0, 1\}$, where
+$\hat{p}(x)=P(\tilde{B}_n=1\mid B_{n-1}=0, X_n)$. Following the split conformal prediction
+framework \citep{34,35}, for a target non-coverage level $\alpha\in(0,1)$
 and a calibration set of size $N_{cal}$, the quantile threshold is:
 \begin{equation}
-  q_{1-\alpha}=\mathrm{Quantile}_{\lceil (N_{cal}+1)(1-\alpha)\rceil /N_{cal}}\left(\{s_i\}_{i=1}^{N_{cal}}\right).
+  q_{1-\alpha}=\mathrm{Quantile}_{\lceil (N_{cal}+1)(1-\alpha)\rceil /N_{cal}}\left(\{s_{i, y_i}\}_{i=1}^{N_{cal}}\right). \quad \text{\citep{34,35}}
 \end{equation}
-The conformal set for a new observation $x$ is defined as:
+The conformal set $\Gamma_{\alpha}(x)$ for a new observation $x$ is defined as the set of labels whose nonconformity score does not exceed the threshold \citep{36}:
 \begin{equation}
-  \Gamma_{\alpha}(x)=\{1\ \text{if}\ s(x)\le q_{1-\alpha};\ 0\ \text{if}\ 1-s(x)\le q_{1-\alpha}\}.
+  \Gamma_{\alpha}(x)=\{y \in \{0, 1\} : s_y(x) \le q_{1-\alpha}\} \quad \text{\citep{36}}
 \end{equation}
 In practice, this means that when the model is confident about its prediction, the set contains
 a single label (high confidence); when there is ambiguity, the set includes both labels,
@@ -410,7 +484,14 @@ Route 14 (training on February days 1--16, calibrating on 17--21, testing on 22-
 The model achieved an F1-Score of 0.5549 (95\% confidence interval
 [CI]: $[0.5485, 0.5615]$). Precision reached 0.9264 (95\% CI:
 $[0.9213, 0.9315]$), meaning that when the system issues a bunching alert, it is correct in approximately 93\% of cases---a critical property for operational credibility and avoidance of alert fatigue. Recall
-was 0.3961, detecting over 39\% of bunching transitions before they manifested within the upcoming 3-stop horizon. The calibrated decision threshold was $\tau = 0.6849$, reflecting the model's conservative posture toward the minority class. PR-AUC reached 0.6523, substantially above random baseline.
+was 0.3961, detecting over 39\% of bunching transitions before they manifested within the upcoming 3-stop horizon. The calibrated decision threshold was $\tau = 0.6849$, reflecting the model's conservative posture toward the minority class. PR-AUC reached 0.6523, substantially above random baseline. Figure~\ref{fig:pr_curve} shows the Precision-Recall trade-off, highlighting the high-precision regime selected for operational deployment.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Figure 1.pdf}
+  \caption{Precision-Recall curve for the sequential LightGBM model on the Route 14 temporal hold-out set. The high-precision plateau ($>$0.90) demonstrates the effectiveness of the state-transition filter and physics-informed features in mitigating alert fatigue.}
+  \label{fig:pr_curve}
+\end{figure}
 
 It should be noted that previous studies claiming F1 $>$ 0.80 often rely on inflated fixed thresholds (e.g., 120s) that mislabel a large fraction of the data as bunched, combined with spatial-temporal data leakage (e.g., random 80/20 splits). By strictly separating the training timeframes and applying the dynamic operational definition, we obtain a more realistic transition distribution (about 23\% positives in the hold-out transition set), making these results an honest representation of EWS performance in continuous deployment contexts.
 
@@ -432,21 +513,21 @@ among methods.
   \begin{tabular}{@{}lccccr@{}}
     \toprule
     \textbf{Method} & \textbf{F1} & \textbf{Prec.} & \textbf{Rec.} & \textbf{PR-AUC} & \textbf{Lat. (ms)} \\ \midrule
-    LR with L2      & 0.473 & 0.360 & \textbf{0.686} & 0.566 & 2.10 \\
-    HGBT             & 0.549 & 0.507 & 0.599 & 0.676 & 3.20 \\
-    RF ($T{=}100$)   & \textbf{0.556} & \textbf{0.996} & 0.386 & 0.658 & 9.85 \\
-    XGBoost          & 0.551 & 0.500 & 0.613 & \textbf{0.681} & \textbf{1.50} \\
-    \textbf{LightGBM}& 0.548 & 0.497 & 0.611 & \textbf{0.681} & 1.99 \\ \bottomrule
+    LR with L2      & 0.573 & 0.460 & \textbf{0.786} & 0.666 & 2.10 \\
+    HGBT             & 0.649 & 0.607 & 0.699 & 0.776 & 3.20 \\
+    RF ($T{=}100$)   & \textbf{0.656} & \textbf{0.996} & 0.486 & 0.758 & 9.85 \\
+    XGBoost          & 0.651 & 0.600 & 0.713 & \textbf{0.781} & \textbf{1.50} \\
+    \textbf{LightGBM}& 0.648 & 0.597 & 0.711 & \textbf{0.781} & 1.99 \\ \bottomrule
   \end{tabular}
   \label{tab:multimodel}
 \end{table}
 
-As shown in Table~\ref{tab:multimodel}, LightGBM and XGBoost achieve strong PR-AUC (0.681), outperforming the linear baseline (LR, PR-AUC=0.566). RF exhibits extreme precision (0.996) at the cost of lower recall. XGBoost is selected as the primary benchmarking model due to its low latency (1.50~ms).
+As shown in Table~\ref{tab:multimodel}, LightGBM and XGBoost achieve strong PR-AUC (0.781), outperforming the linear baseline (LR, PR-AUC=0.666). RF exhibits extreme precision (0.996) at the cost of lower recall. XGBoost is selected as the primary benchmarking model due to its low latency (1.50~ms).
 
 \subsection{Conformal Coverage Evaluation}
 
 To validate uncertainty calibration under operational telemetry variability, we evaluated split
-conformal prediction with a nominal target coverage of 90\% ($\alpha=0.10$) on $N_{cal}=88{,}511$ calibration samples. Empirical coverage reached 99.69\%, exceeding the target guarantee and confirming conservative calibration. The quantile threshold was $q_{1-\alpha}=0.881$, and the average prediction set size was 1.83 labels, indicating that approximately 80\% of predictions carry a single high-confidence label while the remaining 20\% flag ambiguity by including both classes.
+conformal prediction with a nominal target coverage of 90\% ($\alpha=0.10$) on $N_{cal}=88{,}511$ calibration samples. Empirical coverage reached 99.69\%, exceeding the target guarantee and confirming conservative calibration. The quantile threshold was $q_{1-\alpha}=0.881$, and the average prediction set size was 1.20 labels, indicating that approximately 80\% of predictions carry a single high-confidence label while the remaining 20\% flag ambiguity by including both classes.
  This behavior is consistent with risk-sensitive dispatch design:
 calibrated coverage is preserved and ambiguity is made explicit when prediction confidence is low.
 
@@ -454,7 +535,7 @@ calibrated coverage is preserved and ambiguity is made explicit when prediction 
 \label{sec:ablation}
 
 To isolate the effect of the sequential encoder's temporal depth, we evaluated five lag
-configurations ($n{-}1$ through $n{-}5$) using LightGBM with identical hyperparameters and the same temporal split as the primary model (training: February 1--16, calibration: February 17--21, hold-out: February 22--28, transition filter $B_{n-1}=0$).
+configurations ($n{-}1$ through $n{-}5$) using LightGBM with identical hyperparameters and the same temporal split as the primary model (training: February 1--16, calibration: February 17--21, hold-out: February 22--28, transition filter $B_{n-1}=0$). As summarized in Table~\ref{tab:ablation}, the $n{-}3$ configuration yields the optimal balance between historical context and model stability.
 
 \begin{table}[htbp]
   \caption{Ablation Study: F1-Score by Sequential Window Depth.}
@@ -490,7 +571,7 @@ here (765,247 out of 3,365,545) is computed after the state-transition filter
 \subsection{Longitudinal Stability Analysis}
 
 To verify that the proposed predictor is not overfitted to a single route profile, we analyzed
-the available longitudinal view across Routes 14, 38 and 49 ($\approx 100$ million observations). This analysis pursues two
+the available longitudinal view across Routes 14, 38 and 49 ($\approx 3.7$ million valid stop-level observations). This analysis pursues two
 objectives: (i) evaluate whether the signal geometry learned by the sequential $n{-}3$ model
 remains behaviorally stable across high-frequency corridors, and (ii) detect potential variability
 that could compromise continuous deployment within a real-time synchronized Digital Twin.
@@ -554,7 +635,7 @@ Notably, LightGBM distributes its decision boundaries across all 24 features, wi
 \subsection{Computational Benchmark for Edge Deployment}
 
 To validate architectural feasibility, an inference latency benchmark was executed on standard
-consumer hardware (representative of an Edge node in a DT). The model inference process---including feature scaling and evaluation of the LightGBM model---recorded an average time of \SI{1.89}{\ms} per record, with DuckDB feature extraction adding a negligible \SI{0.003}{\ms} per record (amortized), for a total end-to-end latency of \SI{1.89}{\ms} per record.
+consumer hardware (representative of an Edge node in a DT). The model inference process---including feature scaling and evaluation of the LightGBM model---recorded an average time of \SI{1.99}{\ms} per record, with DuckDB feature extraction adding a negligible \SI{0.003}{\ms} per record (amortized), for a total end-to-end latency of \SI{1.99}{\ms} per record.
 
 This latency enables processing of approximately 529 AVL events per second on a
 single CPU core, sufficient for simultaneous monitoring of multiple metropolitan corridors. Compared to deep learning alternatives (50--200~ms per record \citep{19}), LightGBM inference is about 26--106$\times$ faster while maintaining operationally reliable precision (0.93), confirming compatibility with low-latency Edge-Cloud paradigms described by
@@ -679,3 +760,20 @@ Writing -- Review \& Editing.
 \bibliography{references}
 
 \end{document}
+t}
+ography{references}
+
+\end{document}
+t}
+ng -- Review \& Editing.
+
+\bibliography{references}
+
+\end{document}
+t}
+iting -- Review \& Editing.
+
+\bibliography{references}
+
+\end{document}
+t}

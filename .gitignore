@@ -2,7 +2,6 @@
 data/raw/
 data/processed/
 data/outputs/
-data/static/*.zip
 *.db
 *.db.*
 *.wal
@@ -21,9 +20,48 @@ dist/
 # Tools
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 .coverage
 htmlcov/
 
 # IDE
 .vscode/
 .idea/
+.windsurf/
+
+# AI tooling
+.agent/
+.atl/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.out
+*.toc
+indent.log
+
+# LaTeX compiled output (build locally)
+manuscript/**/*.aux
+manuscript/**/*.bbl
+manuscript/**/*.blg
+manuscript/**/*.out
+manuscript/**/*.synctex.gz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AI and Agent artifacts
+CLAUDE.md
+.claude/
+.gemini/
+.geminiignore
+.agent/
+.atl/
+.cursor/
+.windsurf/

@@ -169,10 +169,20 @@ def ingest_json_partition(
 
 def register_view(conn: duckdb.DuckDBPyConnection, view_name: str, parquet_root: Path) -> None:
     parquet_glob = parquet_root / "*" / "*" / "*.parquet"
+    # Use generic drop if possible or just try-except both
+    try:
+        conn.execute(f"DROP TABLE IF EXISTS {view_name}")
+    except duckdb.CatalogException:
+        pass
+    try:
+        conn.execute(f"DROP VIEW IF EXISTS {view_name}")
+    except duckdb.CatalogException:
+        pass
+
     conn.execute(
         "\n".join(
             [
-                f"CREATE OR REPLACE VIEW {view_name} AS",
+                f"CREATE VIEW {view_name} AS",
                 "SELECT *",
                 f"FROM read_parquet({sql_literal(str(parquet_glob))}, hive_partitioning=1, union_by_name=1)",
             ]

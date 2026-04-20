@@ -1,0 +1,8 @@
+# Keep directory structure but ignore all data files.
+# Data must be downloaded/generated locally (see README).
+raw/*
+processed/*
+outputs/*
+!raw/.gitkeep
+!processed/.gitkeep
+!outputs/.gitkeep

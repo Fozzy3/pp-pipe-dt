@@ -3,7 +3,7 @@
 ## What is this?
 Python pipeline that collects real-time transit data (GTFS-RT) from SF Muni via 511.org API,
 stores it in DuckDB, and computes three metrics (headway deviation, delay drift, bunching index)
-for a research paper submission to ETASR journal.
+for a research paper submission to PeerJ Computer Science.
 
 ## Tech Stack
 - Python 3.11+, managed with `uv`
@@ -21,7 +21,7 @@ src/pipeline/
   analysis/    — headway.py, delay_drift.py, bunching.py
   visualization/ — plots.py
   config/      — settings.py (pydantic-settings, loads .env)
-scripts/       — collect.py, analyze.py (CLI entry points)
+scripts/       — collect.py, ingest_longitudinal.py, analyze_longitudinal.py (CLI entry points)
 systemd/       — service + timer files
 ```
 
@@ -33,8 +33,8 @@ uv sync --all-extras
 # Collect one snapshot
 uv run python scripts/collect.py
 
-# Run analysis
-uv run python scripts/analyze.py --route 14
+# Run longitudinal paper analysis
+uv run python scripts/analyze_longitudinal.py
 
 # Tests
 uv run pytest

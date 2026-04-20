@@ -9,7 +9,7 @@ import seaborn as sns
 
 logger = logging.getLogger(__name__)
 
-# ETASR-compatible style
+# PeerJ-compatible style
 plt.rcParams.update(
     {
         "figure.dpi": 300,

@@ -57,8 +57,6 @@ manuscript/**/*.synctex.gz
 Thumbs.db
 
 # AI and Agent artifacts
-CLAUDE.md
-.claude/
 .gemini/
 .geminiignore
 .agent/

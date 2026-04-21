@@ -1,6 +1,9 @@
+[![DOI](https://zenodo.org/badge/1204948585.svg)](https://doi.org/10.5281/zenodo.19673620)
+
 # Bus Bunching Prediction via Early Warning Signals in a Transit Digital Twin
 
 GTFS-RT data pipeline and predictive framework for bus bunching early warning signals, using San Francisco Muni data. Submitted to **PeerJ Computer Science**.
+
 
 ## Overview
 

@@ -424,7 +424,7 @@ explicitly signaling to the operator that caution is warranted.
 
 The empirical validation of the proposed framework is grounded in a large-scale dataset obtained
 from the open 511.org API, capturing the complete operation of San Francisco Municipal Railway
-(SF Muni) during January--March 2026 \citep{28}. The initial raw dataset exceeded 100,000,000 GTFS-RT
+(SF Muni) during January--March 2026 \citep{28}. The processed dataset is publicly archived \citep{39}. The initial raw dataset exceeded 100,000,000 GTFS-RT
 AVL updates.
 
 After applying the strict deduplication and lag-validity protocol from Section~\ref{sec:methodology}, the longitudinal analytical view
@@ -755,11 +755,17 @@ possible.
 
 \section*{Data Availability}
 
-The raw GTFS-RT data used in this study were obtained from the publicly accessible 511.org
-open data API \citep{28}. The complete DuckDB ingestion scripts, transformation pipelines,
-hyperparameter configuration matrices, and instructions for reproducing the dataset are
-available as open-source code at:
-\url{https://github.com/Fozzy3/pp-pipe-dt}.
+The processed dataset used in this study is publicly archived at Zenodo \citep{39}
+(DOI: \href{https://doi.org/10.5281/zenodo.19673388}{10.5281/zenodo.19673388}).
+Raw GTFS-RT feeds were obtained from the 511.org open data API \citep{28}.
+
+\section*{Code Availability}
+
+The complete source code---including DuckDB ingestion scripts, transformation pipelines,
+LightGBM training routines, hyperparameter configuration matrices, and instructions for
+full reproducibility---is publicly archived at Zenodo \citep{38}
+(DOI: \href{https://doi.org/10.5281/zenodo.19673620}{10.5281/zenodo.19673620})
+and maintained at \url{https://github.com/Fozzy3/pp-pipe-dt}.
 
 \section*{Competing Interests}
 

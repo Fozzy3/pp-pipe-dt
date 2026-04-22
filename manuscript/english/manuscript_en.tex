@@ -9,7 +9,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, shadows, backgrounds, fit}
 
-\title{Bus Bunching Prediction via Early Warning Signals in a Transit Digital Twin}
+\title{Bus bunching prediction via early warning signals in a transit digital twin}
 
 \author[1]{Carlos Stiven Mora Hoyos}
 \author[1]{Juan Felipe Rodr\'iguez Galindo}
@@ -488,8 +488,8 @@ was 0.3983, detecting nearly 40\% of bunching transitions before they manifested
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{Figure 1.pdf}
-  \caption{Precision-Recall curve for the sequential LightGBM model on the Route 14 temporal hold-out set. The high-precision plateau ($>$0.90) demonstrates the effectiveness of the state-transition filter and physics-informed features in mitigating alert fatigue.}
+  \includegraphics[width=0.65\textwidth, height=0.32\textheight, keepaspectratio]{Figure 2.pdf}
+  \caption{Precision-Recall curves for the sequential LightGBM model across three SF Muni routes: Route 14 (primary temporal hold-out, AUC$=$0.653), Route 38 (spatial cross-validation, AUC$=$0.650), and Route 49 (spatial cross-validation, AUC$=$0.698). The high-precision plateau ($>$0.90) is consistent across all corridors, demonstrating the generalization of the state-transition filter and physics-informed features in mitigating alert fatigue.}
   \label{fig:pr_curve}
 \end{figure}
 
@@ -600,7 +600,7 @@ without the need for month-specific recalibration.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.98\linewidth]{Figure 2}
+  \includegraphics[width=0.98\linewidth]{Figure 3}
   \caption{Longitudinal trajectory of the bunching index for SF Muni Route 14
     (January--March 2026), showing a stable central tendency and bounded variance across months.}
   \label{fig:longitudinal_bi_14}
@@ -608,7 +608,7 @@ without the need for month-specific recalibration.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.98\linewidth]{Figure 3}
+  \includegraphics[width=0.98\linewidth]{Figure 4}
   \caption{Longitudinal headway drift profile for Route 14. Persistent negative excursions
     remain as the dominant precursor of collapse transitions over time.}
   \label{fig:longitudinal_hd_14}
@@ -616,7 +616,7 @@ without the need for month-specific recalibration.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.98\linewidth]{Figure 4}
+  \includegraphics[width=0.98\linewidth]{Figure 5}
   \caption{Seasonal degradation diagnostic for Route 14, confirming the absence of critical
     temporal instability that would invalidate continuous deployment of the sequential EWS
     framework.}
@@ -751,7 +751,8 @@ signals.
 
 The authors thank the San Francisco Municipal Transportation Agency (SFMTA) and the 511.org
 open data program for providing publicly accessible GTFS-RT feeds that made this research
-possible.
+possible. The authors used AI-assisted tools for language editing and manuscript revision. All
+scientific content, data, and conclusions are the sole responsibility of the authors.
 
 \section*{Data Availability}
 

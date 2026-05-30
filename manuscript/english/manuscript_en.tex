@@ -423,9 +423,15 @@ explicitly signaling to the operator that caution is warranted.
 \subsection{Dataset Description}
 
 The empirical validation of the proposed framework is grounded in a large-scale dataset obtained
-from the open 511.org API, capturing the complete operation of San Francisco Municipal Railway
-(SF Muni) during January--March 2026 \citep{28}. The processed dataset is publicly archived \citep{39}. The initial raw dataset exceeded 100,000,000 GTFS-RT
-AVL updates.
+from the 511.org open data API (\url{https://511.org/open-data/transit}), operated by the
+Metropolitan Transportation Commission (MTC) of the San Francisco Bay Area \citep{28}. Raw
+GTFS-RT feeds---specifically \texttt{VehiclePositions} and \texttt{TripUpdates} endpoints for
+agency \texttt{SF} (San Francisco Municipal Railway)---were collected via authenticated HTTP
+requests at 130-second intervals under the API rate limit of 60~requests per hour. The
+collection period spans January--March 2026, capturing the complete operation of SF Muni during
+that quarter. The initial raw dataset exceeded 100,000,000 GTFS-RT AVL updates. The processed
+dataset is publicly archived at Zenodo \citep{39}
+(DOI: \href{https://doi.org/10.5281/zenodo.19673388}{10.5281/zenodo.19673388}).
 
 After applying the strict deduplication and lag-validity protocol from Section~\ref{sec:methodology}, the longitudinal analytical view
 contained 3,709,358 valid stop-level observations, of which 3,365,543 had sufficient lag context for sequential modeling. We selected three major
@@ -450,6 +456,41 @@ computed on observations unseen during model fitting.
 
 In spatial cross-validation, the model trained on Route 14 (February days 1--16) and calibrated on February 17--21 was deployed to infer transitions on Routes 38 and 49 without retraining or weight
 adjustment.
+
+\subsection{Computing Infrastructure}
+
+All experiments were executed on a workstation running Fedora Linux 43 (kernel 6.19) with an
+AMD Ryzen 7 7700X processor (8 cores / 16 threads), 32\,GB DDR5 RAM, and NVMe SSD storage.
+The software stack comprised Python~3.14, DuckDB~1.5.1, LightGBM~4.6.0, XGBoost~3.2.0,
+scikit-learn~1.8.0, NumPy~2.4.4, Pandas~3.0.2, and Matplotlib~3.10.8. All training and
+inference routines were restricted to a single CPU thread
+(\texttt{n\_jobs=1}, \texttt{nthread=1}) to ensure deterministic reproducibility; no GPU
+acceleration was employed.
+
+\subsection{Data Preprocessing}
+
+The raw GTFS-RT feeds ingested from the 511.org API undergo four sequential preprocessing steps
+before entering the predictive pipeline:
+\begin{enumerate}
+  \item \textbf{Protobuf parsing and timestamp normalization.} Each GTFS-RT
+    \texttt{FeedMessage} (Protocol Buffers binary format) is deserialized into tabular form.
+    Departure timestamps are selected when available; otherwise, arrival timestamps are used as
+    fallback. All timestamps are converted to seconds-of-day for consistent sequential
+    computation.
+  \item \textbf{Deduplication and temporal ordering.} Duplicate records (same vehicle, trip,
+    stop, and timestamp) are removed. Observations are ordered by route, service date, stop
+    sequence, and departure time to enable correct lag computation.
+  \item \textbf{Lag-validity filtering.} DuckDB window functions (\texttt{LAG}, \texttt{LEAD})
+    partitioned by route, service date, and vehicle compute inter-vehicle headways and sequential
+    state variables. Observations with invalid lag context---such as the first vehicle of the day
+    at a stop, or temporal gaps exceeding 7{,}200\,s between consecutive vehicles---are excluded
+    from inference to prevent spurious feature values.
+  \item \textbf{State-transition filtering.} Only observations where the bus was not already
+    bunching at the preceding stop ($B_{n-1}=0$) are retained for model training and evaluation,
+    as described in Section~\ref{sec:methodology}.
+\end{enumerate}
+After preprocessing, the initial ${\sim}$100\,M raw AVL updates are reduced to 3,365,543
+lag-valid, transition-filtered observations suitable for sequential modeling.
 
 \subsection{Evaluation Metrics}
 
